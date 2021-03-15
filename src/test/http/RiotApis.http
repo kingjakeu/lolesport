@@ -1,0 +1,54 @@
+### 경기 디테일
+GET https://acs.leagueoflegends.com/v1/stats/game/ESPORTSTMNT01/1885163?gameHash=21d6065b9600a6d9
+Cookie: id_token=eyJraWQiOiJzMSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI1MDZmMzlmMC02MWVlLTU3NGEtYTE4YS0wYjAwYzE5MTNmMDYiLCJjb3VudHJ5Ijoia29yIiwicGxheWVyX3Bsb2NhbGUiOiJrby1LUiIsImFtciI6WyJwYXNzd29yZCJdLCJpc3MiOiJodHRwczpcL1wvYXV0aC5yaW90Z2FtZXMuY29tIiwibG9sIjpbeyJjdWlkIjo0NzQ0ODAwLCJjcGlkIjoiS1IiLCJ1aWQiOjQ3NDQ4MDAsInVuYW1lIjoiamFrZWhzdSIsInB0cmlkIjpudWxsLCJwaWQiOiJLUiIsInN0YXRlIjoiRU5BQkxFRCJ9XSwibG9jYWxlIjoiZW5fVVMiLCJhdWQiOiJyc28td2ViLWNsaWVudC1wcm9kIiwiYWNyIjoidXJuOnJpb3Q6YnJvbnplIiwicGxheWVyX2xvY2FsZSI6ImtvLUtSIiwiZXhwIjoxNjE0OTI5Mjg3LCJpYXQiOjE2MTQ4NDI4ODcsImFjY3QiOnsiZ2FtZV9uYW1lIjoi7ISc64yA66y46rWs7LqQ66as66i47IugIiwidGFnX2xpbmUiOiJLUjEifSwianRpIjoibzBVNzJOSzZqV0EiLCJsb2dpbl9jb3VudHJ5Ijoia29yIn0.ho-ri8As1cur6UjefjRyXDjdLNpkSRDNCmINXr2yITxPkmlU-Ox_OFxiYU1hI84pRXdZxANgZqSZCR59d4qW9_Q4cTVd6fKXxptFB89RbCou3A4s5SSMu6kR1i-EFIn-cm6JFtX_1b2zZPd8HWnbImaqIj9S8dNKdiWVnOOCoyA
+
+### 리그 정보
+GET https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=ko-KR
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 시즌 정보
+GET https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=ko-KR&leagueId=98767991310872058
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 순위
+GET https://esports-api.lolesports.com/persisted/gw/getStandings?hl=ko-KR&tournamentId=105522984810490982
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 스케줄
+GET https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=ko-KR&leagueId=98767991310872058
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 라이브
+GET https://esports-api.lolesports.com/persisted/gw/getLive?hl=ko-KR
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 끝난 경기
+GET https://esports-api.lolesports.com/persisted/gw/getCompletedEvents?hl=ko-KR&tournamentId=105522984810490982
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 경기 디테일 = matchID
+GET https://esports-api.lolesports.com/persisted/gw/getEventDetails?hl=ko-KR&id=105522984812916145
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 게임
+GET https://esports-api.lolesports.com/persisted/gw/getGames?hl=ko-KR&id=105522984812916150
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+### 매치
+GET https://feed.lolesports.com/livestats/v1/window/105522984812916150?startingTime=2021-03-07T08:00:00Z
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+###
+GET https://feed.lolesports.com/livestats/v1/details/105522984812916150
+
+###
+GET https://feed.lolesports.com/livestats/v1/details/105522984812916150?startingTime=2021-03-07T08:15:40.000Z&participantIds=1
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
+
+
+###
+GET http://na.lolesports.com/api/player/
+
+### 팀정보
+GET https://esports-api.lolesports.com/persisted/gw/getTeams?hl=ko-KR&id=100725845018863243
+x-api-key: 0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z
