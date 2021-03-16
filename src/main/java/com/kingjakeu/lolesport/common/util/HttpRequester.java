@@ -6,10 +6,15 @@ import com.kingjakeu.lolesport.api.info.dto.matchHistory.GameDto;
 import com.kingjakeu.lolesport.api.info.dto.schedule.ScheduleDataDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,15 +25,23 @@ public class HttpRequester {
 
     }
 
-    public static String doGet(String url, Map<String, String> httpHeader) throws JsonProcessingException {
+    public static String doGet(String url, Map<String, String> httpHeader, Map<String, String> queryParams) {
         WebClient webClient = createDefaultGetClient(url);
         WebClient.RequestHeadersUriSpec<?> uriSpec = webClient.get();
 
-        WebClient.RequestHeadersSpec<?> headersSpec = uriSpec.uri("");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.setAll(queryParams);
+
+        WebClient.RequestHeadersSpec<?> headersSpec = uriSpec.uri(
+                uriBuilder -> uriBuilder
+                        .queryParams(params)
+                        .build()
+        );
 
         for(Map.Entry<String, String> header : httpHeader.entrySet()){
             headersSpec = headersSpec.header(header.getKey(), header.getValue());
         }
+
         Mono<String> response = headersSpec.retrieve().bodyToMono(String.class);
         return response.block();
     }
@@ -43,19 +56,6 @@ public class HttpRequester {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException, JsonProcessingException {
-        Map<String, String> httpHeaders = new HashMap<>();
-        httpHeaders.put("x-api-key", "0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z");
-        String str = doGet(
-                "https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=ko-KR&leagueId=98767991310872058",
-                httpHeaders
-        );
 
-        Map<String, Object> response = new ObjectMapper().readValue(str, Map.class);
-        Map<String, Object> data = (Map<String, Object>) response.get("data");
-
-//        doGet(
-//                "https://acs.leagueoflegends.com/v1/stats/game/ESPORTSTMNT01/1885163?gameHash=21d6065b9600a6d9",
-//                httpHeaders
-//        );
     }
 }

@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Getter
-@ToString
 @NoArgsConstructor
 public class ScheduleDto {
     private ArrayList<ScheduleEventDto> events;
-    private Map<String, Object> pages;
+    private SchedulePageDto pages;
 }
