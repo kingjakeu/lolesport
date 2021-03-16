@@ -10,7 +10,7 @@ public enum  CrawlUrl {
     LOL_GAMEPEDIA("https://lol.gamepedia.com"),
     LCK_TEAM_LIST("https://lol.gamepedia.com/LCK/2021_Season/Spring_Season"),
 
-    LCK_SCHEDULE_LIST(
+    LEAGUE_SCHEDULE_LIST(
             "https://esports-api.lolesports.com/persisted/gw/getSchedule",
             HttpHeaders.LOL_ESPORTS_HEADER
     ),

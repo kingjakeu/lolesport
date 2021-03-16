@@ -12,18 +12,18 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "MATCH_INFO")
+@Table(name = "MATCH")
 public class Match {
 
     @Id
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "blockName")
+    @Column(name = "BLOCK_NAME")
     private String blockName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "LEAGUE_CD")
+    @Column(name = "LEAGUE_CODE")
     private LolLeague league;
 
     @Column(name = "TEAM_1")
