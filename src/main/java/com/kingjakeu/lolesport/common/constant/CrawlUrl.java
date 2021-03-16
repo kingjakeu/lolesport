@@ -15,6 +15,11 @@ public enum  CrawlUrl {
             HttpHeaders.LOL_ESPORTS_HEADER
     ),
 
+    TEAM_INFO_LIST(
+            "https://esports-api.lolesports.com/persisted/gw/getTeams",
+            HttpHeaders.LOL_ESPORTS_HEADER
+    )
+
     ;
     private String url;
     private Map<String, String> httpHeader;
