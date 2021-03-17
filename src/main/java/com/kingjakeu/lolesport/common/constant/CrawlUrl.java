@@ -12,6 +12,16 @@ public enum  CrawlUrl {
     LCK_TEAM_LIST("https://lol.gamepedia.com/LCK/2021_Season/Spring_Season"),
     LCK_MATCH_HISTORY_LIST("https://lol.gamepedia.com/LCK/2021_Season/Spring_Season/Match_History"),
 
+    LEAGUE_LIST(
+            "https://esports-api.lolesports.com/persisted/gw/getLeagues",
+            CrawlUrl.lolEsportHeader()
+    ),
+
+    TOURNAMENT_LIST(
+            "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague",
+            CrawlUrl.lolEsportHeader()
+    ),
+
     LEAGUE_SCHEDULE_LIST(
             "https://esports-api.lolesports.com/persisted/gw/getSchedule",
             CrawlUrl.lolEsportHeader()

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "MATCH")
+@Table(name = "MATCH_INFO")
 public class Match {
 
     @Id

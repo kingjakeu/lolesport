@@ -35,15 +35,16 @@ public class GameDto {
     }
 
     public LocalDateTime getStartTime(){
-        return vods.get(0) == null ? null : ZonedDateTime.parse(vods.get(0).getFirstFrameTime()).toLocalDateTime();
+        if(vods.isEmpty()) return null;
+        return vods.get(0).getFirstFrameTime() == null ? null : ZonedDateTime.parse(vods.get(0).getFirstFrameTime()).toLocalDateTime();
     }
 
     public Long getStartMillis(){
-        return vods.get(0) == null ? null : vods.get(0).getStartMillis();
+        return vods.isEmpty() ? null : vods.get(0).getStartMillis();
     }
 
     public Long getEndMillis(){
-        return vods.get(0) == null ? null : vods.get(0).getEndMillis();
+        return vods.isEmpty() ? null : vods.get(0).getEndMillis();
     }
 
 }

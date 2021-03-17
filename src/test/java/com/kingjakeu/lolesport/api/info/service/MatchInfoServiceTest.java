@@ -26,7 +26,34 @@ class MatchInfoServiceTest {
     @Test
     void crawlMatchEvents() {
         try {
-            this.matchInfoService.crawlMatchEvents("105522984812916145");
+            this.matchInfoService.crawlMatchEvent("105522984812916145");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testCrawlMatchEvents() {
+        try{
+            this.matchInfoService.crawlMatchEvents();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void crawlLeagueInfos() {
+        try{
+            this.matchInfoService.crawlLeagueInfos();
+        }catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void crawlLeagueTournamentInfos() {
+        try {
+            this.matchInfoService.crawlLeagueTournamentInfos("98767991310872058");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
