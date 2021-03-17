@@ -10,8 +10,8 @@ public enum LolLeague {
 
     NF("NF", "not found")
     ;
-    private String name;
-    private String slug;
+    private final String name;
+    private final String slug;
 
     LolLeague(String name, String slug){
         this.name = name;

@@ -1,22 +1,13 @@
 package com.kingjakeu.lolesport.common.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kingjakeu.lolesport.api.info.dto.matchHistory.GameDto;
-import com.kingjakeu.lolesport.api.info.dto.schedule.ScheduleDataDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -58,9 +49,5 @@ public class HttpRequester {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 
                 .build();
-    }
-
-    public static void main(String[] args) throws UnsupportedEncodingException, JsonProcessingException {
-
     }
 }

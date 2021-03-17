@@ -38,7 +38,7 @@ public class TeamInfoService {
 
     public void crawlLckTeams(){
         try {
-            Document doc = Crawler.doGet(CrawlUrl.LCK_TEAM_LIST.getUrl());
+            Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
             Elements roasterHeaders = doc.getElementsByClass("tournament-roster-header");
             for(Element header : roasterHeaders){
                 Elements headerLinks = header.getElementsByTag("a");
@@ -71,6 +71,5 @@ public class TeamInfoService {
                 qualifiedTeams.add(teamDto);
             }
         }
-        System.out.println("DONE");
     }
 }

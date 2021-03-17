@@ -1,14 +1,18 @@
 package com.kingjakeu.lolesport.common.util;
 
-import com.kingjakeu.lolesport.common.constant.DateTimeFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kingjakeu.lolesport.common.constant.CrawlUrl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Crawler {
-    public static Document doGet(String url) throws IOException {
+    public static Document doGetDocument(String url) throws IOException {
         return Jsoup.connect(url).get();
     }
 
@@ -21,18 +25,23 @@ public class Crawler {
                 .post();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static <T> T doGetObject(CrawlUrl crawlUrl, Map<String, String> parameters, TypeReference<T> typeReference) throws JsonProcessingException {
+        return doGetObject(crawlUrl.getUrl(), crawlUrl.getHttpHeader(), parameters, typeReference);
+    }
 
-        String str  = "June 7, 2000 ";
-        LocalDate localDate = LocalDate.parse(str, DateTimeFormat.PLAYER_BIRTHDAY);
-        System.out.println(localDate);
-//        Document doc = doGet("https://lol.gamepedia.com/Kiin");
-//        Element el = doc.getElementById("infoboxPlayer");
-//
-//        Elements elements = el.getElementsByTag("td");
-//        int idx = 0;
-//        for(Element element : elements){
-//            System.out.println(idx++ + " "+ element.text());
-//        }
+    public static <T> T doGetObject(String url, Map<String, String> httpHeaders, Map<String, String> parameters, TypeReference<T> typeReference) throws JsonProcessingException {
+        String result = HttpRequester.doGet(
+                url,
+                httpHeaders,
+                parameters
+        );
+        return new ObjectMapper().readValue(result, typeReference);
+    }
+
+
+    public static Map<String, String> createCommonLolEsportParameters(){
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("hl", "ko-KR");
+        return parameters;
     }
 }

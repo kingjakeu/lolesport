@@ -12,7 +12,7 @@ public enum LolRole {
     COH("Coach"),
     NF("Not Found")
     ;
-    private String fullName;
+    private final String fullName;
 
     LolRole(String fullName){
         this.fullName = fullName;

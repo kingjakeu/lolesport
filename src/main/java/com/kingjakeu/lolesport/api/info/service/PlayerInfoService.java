@@ -26,7 +26,7 @@ public class PlayerInfoService {
     public void crawlLckPlayers(){
         try{
             List<String> linkList = new ArrayList<>();
-            Document doc = Crawler.doGet(CrawlUrl.LCK_TEAM_LIST.getUrl());
+            Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
             Elements playerElements = doc.getElementsByClass("tournament-roster-player");
 
             for(Element playerElement : playerElements){
@@ -46,7 +46,7 @@ public class PlayerInfoService {
 
     public void crawlPlayer(String link){
         try {
-            Document doc = Crawler.doGet(CrawlUrl.LOL_GAMEPEDIA.getUrl() + link);
+            Document doc = Crawler.doGetDocument(CrawlUrl.LOL_GAMEPEDIA.getUrl() + link);
             Element infoboxPlayer = doc.getElementById("infoboxPlayer");
 
             // maybe only one title info box

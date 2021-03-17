@@ -1,14 +1,11 @@
 package com.kingjakeu.lolesport.api.info.dto.schedule;
 
 import com.kingjakeu.lolesport.api.info.domain.Match;
-import com.kingjakeu.lolesport.common.constant.DateTimeFormat;
 import com.kingjakeu.lolesport.common.constant.LolLeague;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor

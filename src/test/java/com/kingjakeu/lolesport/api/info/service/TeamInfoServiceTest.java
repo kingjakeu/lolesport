@@ -9,24 +9,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class MatchInfoServiceTest {
-
+class TeamInfoServiceTest {
     @Autowired
-    private MatchInfoService matchInfoService;
+    private TeamInfoService teamInfoService;
 
     @Test
-    public void crawlLeagueSchedule(){
+    void newCrawl() {
         try {
-            this.matchInfoService.crawlLeagueSchedules("98767991310872058");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void crawlMatchEvents() {
-        try {
-            this.matchInfoService.crawlMatchEvents("105522984812916145");
+            this.teamInfoService.newCrawl();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
