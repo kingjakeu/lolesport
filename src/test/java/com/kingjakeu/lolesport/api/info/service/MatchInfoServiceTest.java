@@ -45,7 +45,7 @@ class MatchInfoServiceTest {
     @Order(3)
     void crawlLeagueSchedule(){
         try {
-            this.teamInfoService.crawlTeams("LCK");
+            this.teamInfoService.crawlTeamsAndPlayers("LCK");
             this.matchInfoService.crawlLeagueSchedules("98767991310872058");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -56,7 +56,7 @@ class MatchInfoServiceTest {
    // @Order(4)
     void testCrawlMatchEvents() {
         try{
-            this.matchInfoService.crawlMatchEvents();
+            this.matchInfoService.crawlMatchGameEvents();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,7 @@ class MatchInfoServiceTest {
     //@Test
     void crawlMatchEvents() {
         try {
-            this.matchInfoService.crawlMatchEvent("105522984812916145");
+            this.matchInfoService.crawlMatchGameEvent("105522984812916145");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

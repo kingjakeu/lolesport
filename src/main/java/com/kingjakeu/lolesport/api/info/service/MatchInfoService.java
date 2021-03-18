@@ -2,10 +2,7 @@ package com.kingjakeu.lolesport.api.info.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.kingjakeu.lolesport.api.info.dao.GameRepository;
-import com.kingjakeu.lolesport.api.info.dao.LeagueRepository;
-import com.kingjakeu.lolesport.api.info.dao.MatchRepository;
-import com.kingjakeu.lolesport.api.info.dao.TournamentRepository;
+import com.kingjakeu.lolesport.api.info.dao.*;
 import com.kingjakeu.lolesport.api.info.domain.League;
 import com.kingjakeu.lolesport.api.info.domain.Match;
 import com.kingjakeu.lolesport.api.info.dto.LolEsportDataDto;
@@ -30,12 +27,13 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MatchInfoService {
 
+    private final TeamRepository teamRepository;
     private final LeagueRepository leagueRepository;
     private final TournamentRepository tournamentRepository;
     private final MatchRepository matchRepository;
     private final GameRepository gameRepository;
 
-
+    // LEAGUE 저장
     public void crawlLeagueInfos() throws JsonProcessingException {
         Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
         LolEsportDataDto<LeagueDataDto> resultDto = Crawler.doGetObject(
@@ -47,8 +45,8 @@ public class MatchInfoService {
         this.leagueRepository.saveAll(leagueList);
     }
 
+    // TOURNAMENT 저장
     public void crawlLeagueTournamentInfos(String leagueId) throws JsonProcessingException {
-
         final League league = this.findLeagueById(leagueId);
 
         Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
@@ -62,29 +60,35 @@ public class MatchInfoService {
         this.tournamentRepository.saveAll(tournamentLeagueDto.toTournamentEntities(league));
     }
 
+    // MATCH 저장
     public void crawlLeagueSchedules(String leagueId) throws JsonProcessingException {
-
         final League league = this.findLeagueById(leagueId);
 
         Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
         parameters.put("leagueId", league.getId());
         ScheduleDto scheduleDto = this.crawlLeagueSchedule(parameters);
 
-        List<Match> matches = new ArrayList<>();
         for(ScheduleEventDto eventDto : scheduleDto.getEvents()){
-            if(eventDto.isNotInProgress()){
-                matches.add(eventDto.toMatchEntity(league));
-            }
+            this.saveMatch(eventDto, league);
         }
 
         while (scheduleDto.getPages().getOlder() != null) {
             parameters.put("pageToken", scheduleDto.getPages().getOlder());
             scheduleDto = this.crawlLeagueSchedule(parameters);
+
             for(ScheduleEventDto eventDto : scheduleDto.getEvents()){
-                matches.add(eventDto.toMatchEntity(league));
+                this.saveMatch(eventDto, league);
             }
         }
-        this.matchRepository.saveAll(matches);
+    }
+
+    private void saveMatch(ScheduleEventDto eventDto, League league){
+        if(eventDto.isNotInProgress()){
+            Match match = eventDto.toMatchEntity(league);
+            match.setTeam1(this.teamRepository.findByCode(match.getTeam1().getCode()));
+            match.setTeam2(this.teamRepository.findByCode(match.getTeam2().getCode()));
+            this.matchRepository.save(match);
+        }
     }
 
     private League findLeagueById(String leagueId){
@@ -93,22 +97,23 @@ public class MatchInfoService {
         return leagueOptional.get();
     }
 
+    // 스케줄
     private ScheduleDto crawlLeagueSchedule(Map<String, String> parameters) throws JsonProcessingException {
         LolEsportDataDto<ScheduleDataDto> resultDto = Crawler.doGetObject(
                 CrawlUrl.LEAGUE_SCHEDULE_LIST, parameters, new TypeReference<>() {});
-
         return resultDto.getData()
                 .getSchedule();
     }
 
-    public void crawlMatchEvents() throws JsonProcessingException {
+    // GAME 저장
+    public void crawlMatchGameEvents() throws JsonProcessingException {
         List<Match> matchList = this.matchRepository.findAll();
         for(Match match : matchList){
-            this.crawlMatchEvent(match.getId());
+            this.crawlMatchGameEvent(match.getId());
         }
     }
 
-    public void crawlMatchEvent(String matchId) throws JsonProcessingException {
+    public void crawlMatchGameEvent(String matchId) throws JsonProcessingException {
         Map<String, String> parameters =Crawler.createCommonLolEsportParameters();
         parameters.put("id", matchId);
 

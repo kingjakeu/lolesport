@@ -35,6 +35,10 @@ public class Team {
     @Column(name = "IMAGE_URL")
     private String imageUrl;
 
+    @Setter
+    @Column(name = "CRAWL_KEY", length = 100)
+    private String crawlKey;
+
     @CreationTimestamp
     @Column(name = "CREATE_DTM", nullable = false, updatable = false, columnDefinition = "timestamp")
     private LocalDateTime createDateTime;

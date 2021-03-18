@@ -9,7 +9,6 @@ import com.kingjakeu.lolesport.api.info.dto.team.TeamDataDto;
 import com.kingjakeu.lolesport.api.info.dto.team.TeamDto;
 import com.kingjakeu.lolesport.common.constant.CrawlUrl;
 import com.kingjakeu.lolesport.common.constant.DateTimeFormat;
-import com.kingjakeu.lolesport.common.constant.LolRole;
 import com.kingjakeu.lolesport.common.util.Crawler;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Document;
@@ -19,9 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,51 +28,39 @@ public class PlayerInfoService {
 
     private final PlayerRepository playerRepository;
 
-    public void crawlLckPlayers(){
-        try{
-            List<String> linkList = new ArrayList<>();
-            Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
-            Elements playerElements = doc.getElementsByClass("tournament-roster-player");
+    public void crawlLckPlayersCrawlKeyword() throws Exception{
+        Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
+        Elements playerElements = doc.getElementsByClass("tournament-roster-player");
 
-            for(Element playerElement : playerElements){
-                Elements playerLinks = playerElement.getElementsByTag("a");
-                for(Element playerLink : playerLinks){
-                    linkList.add(playerLink.attr("href"));
+        for(Element playerElement : playerElements){
+            Elements playerLinks = playerElement.getElementsByTag("a");
+            for(Element playerLink : playerLinks){
+                String summonerName = playerLink.text();
+                Optional<Player> playerOptional = this.playerRepository.findBySummonerName(summonerName);
+
+                if(playerOptional.isPresent()){
+                    Player player = playerOptional.get();
+                    player.setCrawlKey(playerLink.attr("href"));
+                    this.playerRepository.save(player);
                 }
             }
-
-            for(String link : linkList){
-                this.crawlPlayer(link);
-            }
-        } catch (IOException ioe){
-            ioe.printStackTrace();
         }
     }
 
-    public void crawlPlayer(String link){
-        try {
-            Document doc = Crawler.doGetDocument(CrawlUrl.LOL_GAMEPEDIA.getUrl() + link);
-            Element infoboxPlayer = doc.getElementById("infoboxPlayer");
+    public void crawlPlayersDetailsInfo() throws IOException {
+        List<Player> playerList = this.playerRepository.findAll();
+        for(Player player : playerList){
+            if(player.getCrawlKey() != null){
+                Document doc = Crawler.doGetDocument(CrawlUrl.LOL_GAMEPEDIA.getUrl() + player.getCrawlKey());
+                Element infoboxPlayer = doc.getElementById("infoboxPlayer");
+                Elements otherInfos = infoboxPlayer.getElementsByTag("td");
+                String birthdayStr = otherInfos.get(6).text().split("\\(")[0];
 
-            // maybe only one title info box
-            Elements infoBoxTitle = infoboxPlayer.getElementsByClass("infobox-title");
-            String playName = infoBoxTitle.get(0).text();
-
-            Elements otherInfos = infoboxPlayer.getElementsByTag("td");
-            String birthdayStr = otherInfos.get(6).text().split("\\(")[0];
-
-            Player player = Player.builder()
-                    .summonerName(playName)
-                    .name(otherInfos.get(2).text())
-                    .nationality(otherInfos.get(4).text())
-                    .birthDay(LocalDate.parse(birthdayStr, DateTimeFormat.PLAYER_BIRTHDAY))
-                    //.teamName(otherInfos.get(10).text().substring(2))
-                    .role(LolRole.findByFullName(otherInfos.get(14).text()))
-                    .build();
-
-            playerRepository.save(player);
-        } catch (IOException e) {
-            e.printStackTrace();
+                player.setName(otherInfos.get(2).text().split("\\(")[1].replace(")",""));
+                player.setBirthDay(LocalDate.parse(birthdayStr, DateTimeFormat.PLAYER_BIRTHDAY));
+                player.setNationality(otherInfos.get(4).text());
+                playerRepository.save(player);
+            }
         }
     }
 
@@ -87,7 +74,7 @@ public class PlayerInfoService {
                 .getTeams();
 
         for(TeamDto teamDto : teamDtoList){
-            this.playerRepository.saveAll(teamDto.toPlayerEntities());
+            //this.playerRepository.saveAll(teamDto.toPlayerEntities());
         }
     }
 }

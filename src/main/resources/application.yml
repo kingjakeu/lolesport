@@ -15,4 +15,14 @@ spring:
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-            ddl-auto: create
+            ddl-auto: update
+
+# log properties
+logging:
+    level:
+        root: info
+        org:
+            hibernate:
+                type:
+                    descriptor:
+                        sql: trace

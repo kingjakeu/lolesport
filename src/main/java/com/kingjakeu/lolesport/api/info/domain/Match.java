@@ -26,10 +26,12 @@ public class Match {
     @JoinColumn(name = "LEAGUE_ID")
     private League league;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "TEAM_1_ID")
     private Team team1;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "TEAM_2_ID")
     private Team team2;

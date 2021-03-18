@@ -45,12 +45,12 @@ public class TeamDto {
                  .build();
     }
 
-    public List<Player> toPlayerEntities(){
+    public List<Player> toPlayerEntities(Team team){
         if(this.players == null) return Collections.emptyList();
 
         List<Player> playerList = new ArrayList<>();
         for(TeamPlayerDto teamPlayerDto : this.players){
-            playerList.add(teamPlayerDto.toPlayerEntity(this.id));
+            playerList.add(teamPlayerDto.toPlayerEntity(team));
         }
         return playerList;
     }

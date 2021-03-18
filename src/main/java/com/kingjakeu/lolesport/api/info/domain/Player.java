@@ -2,9 +2,12 @@ package com.kingjakeu.lolesport.api.info.domain;
 
 import com.kingjakeu.lolesport.common.constant.LolRole;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,32 +18,48 @@ import java.time.LocalDate;
 public class Player {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 20)
     private String id;
 
-    @Column(name = "SUMMONER_NAME")
+    @Column(name = "SUMMONER_NAME", length = 50)
     private String summonerName;
 
-    @Column(name = "NAME")
+    @Setter
+    @Column(name = "NAME", length = 50)
     private String name;
 
-    @Column(name = "ENG_NAME")
+    @Column(name = "ENG_NAME", length = 50)
     private String englishName;
 
+    @Setter
     @Column(name = "BIRTHDAY")
     private LocalDate birthDay;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE")
+    @Column(name = "ROLE", length = 5)
     private LolRole role;
 
-    @Column(name = "TEAM_ID")
-    private String teamId;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
-    @Column(name = "NATIONALITY")
+    @Setter
+    @Column(name = "NATIONALITY", length = 50)
     private String nationality;
 
+    @Lob
     @Column(name = "IMAGE_URL")
     private String imageUrl;
 
+    @Setter
+    @Column(name = "CRAWL_KEY", length = 100)
+    private String crawlKey;
+
+    @CreationTimestamp
+    @Column(name = "CREATE_DTM", nullable = false, updatable = false, columnDefinition = "timestamp")
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
+    private LocalDateTime updateDateTime;
 }
