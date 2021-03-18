@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class ScheduleLeagueDto {
     private String name;
     private String slug;
+    private String image;
 }

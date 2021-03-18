@@ -2,8 +2,17 @@ spring:
     h2:
         console:
             enabled: true
+    datasource:
+        url: jdbc:mariadb://lolesport.cgcrmk7vdleu.ap-northeast-2.rds.amazonaws.com:3306/lolesports
+        driver-class-name: org.mariadb.jdbc.Driver
+        username: lolesports
+        password: lol2012
     jpa:
-        show-sql: false
+        show-sql: true
         properties:
             hibernate:
                 format_sql: true
+        hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+            ddl-auto: create

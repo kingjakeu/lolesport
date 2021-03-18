@@ -1,12 +1,12 @@
 package com.kingjakeu.lolesport.api.info.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,15 +16,27 @@ import java.time.LocalDate;
 @Table(name = "TOURNAMENT_INFO")
 public class Tournament {
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 20)
     private String id;
 
-    @Column(name = "SLUG")
+    @Column(name = "SLUG", nullable = false, length = 50)
     private String slug;
+
+    @ManyToOne
+    @JoinColumn(name = "LEAGUE_ID")
+    private League league;
 
     @Column(name = "START_DATE")
     private LocalDate startDate;
 
     @Column(name = "END_DATE")
     private LocalDate endDate;
+
+    @CreationTimestamp
+    @Column(name = "CREATE_DTM", nullable = false, updatable = false, columnDefinition = "timestamp")
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
+    private LocalDateTime updateDateTime;
 }

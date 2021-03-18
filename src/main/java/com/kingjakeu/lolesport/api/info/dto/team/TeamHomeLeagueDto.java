@@ -1,5 +1,6 @@
 package com.kingjakeu.lolesport.api.info.dto.team;
 
+import com.kingjakeu.lolesport.api.info.domain.League;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

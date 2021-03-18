@@ -1,11 +1,11 @@
 package com.kingjakeu.lolesport.api.info.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,19 +15,28 @@ import javax.persistence.Table;
 @Table(name = "LEAGUE_INFO")
 public class League {
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 20)
     private String id;
 
-    @Column(name = "SLUG")
+    @Column(name = "SLUG", nullable = false, length = 50)
     private String slug;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "REGION")
+    @Column(name = "REGION", nullable = false, length = 100)
     private String region;
 
+    @Lob
     @Column(name = "IMAGE_URL")
     private String imageUrl;
+
+    @CreationTimestamp
+    @Column(name = "CREATE_DTM", nullable = false, updatable = false,  columnDefinition = "timestamp")
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
+    private LocalDateTime updateDateTime;
 }
 

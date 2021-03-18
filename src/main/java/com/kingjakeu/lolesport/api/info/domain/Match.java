@@ -1,7 +1,8 @@
 package com.kingjakeu.lolesport.api.info.domain;
 
-import com.kingjakeu.lolesport.common.constant.LolLeague;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,29 +15,37 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "MATCH_INFO")
 public class Match {
-
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 20)
     private String id;
 
-    @Column(name = "BLOCK_NAME")
+    @Column(name = "BLOCK_NAME", length = 100)
     private String blockName;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "LEAGUE_CODE")
-    private LolLeague league;
+    @ManyToOne
+    @JoinColumn(name = "LEAGUE_ID")
+    private League league;
 
-    @Column(name = "TEAM_1")
-    private String team1;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_1_ID")
+    private Team team1;
 
-    @Column(name = "TEAM_2")
-    private String team2;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_2_ID")
+    private Team team2;
 
-    @Column(name = "START_TIME")
+    @Column(name = "START_TIME", columnDefinition = "datetime")
     private LocalDateTime startTime;
 
-    @Column(name = "STATE")
+    @Column(name = "STATE", length = 20)
     private String state;
 
+    @CreationTimestamp
+    @Column(name = "CREATE_DTM", nullable = false, updatable = false, columnDefinition = "timestamp")
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
+    private LocalDateTime updateDateTime;
 }
 

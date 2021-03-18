@@ -13,10 +13,14 @@ class TeamInfoServiceTest {
     @Autowired
     private TeamInfoService teamInfoService;
 
+    @Autowired
+    private MatchInfoService matchInfoService;
+
     @Test
-    void newCrawl() {
+    void crawlTeams() {
         try {
-            this.teamInfoService.newCrawl();
+            this.matchInfoService.crawlLeagueInfos();
+            this.teamInfoService.crawlTeams("LCK");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

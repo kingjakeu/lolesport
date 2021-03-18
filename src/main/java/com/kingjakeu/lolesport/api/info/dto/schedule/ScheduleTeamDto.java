@@ -1,5 +1,6 @@
 package com.kingjakeu.lolesport.api.info.dto.schedule;
 
+import com.kingjakeu.lolesport.api.info.domain.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -16,4 +17,7 @@ public class ScheduleTeamDto {
     private Map<String, Object> record;
     private Map<String, Object> result;
 
+    public Team toTeamEntity(){
+        return Team.builder().code(this.code).build();
+    }
 }

@@ -4,11 +4,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,39 +17,53 @@ import java.time.LocalDateTime;
 @Table(name = "GAME_INFO")
 public class Game {
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 20)
     private String id;
 
-    @Column(name = "MATCH_ID")
-    private String matchId;
+    @ManyToOne
+    @JoinColumn(name = "MATCH_ID")
+    private Match match;
 
-    @Column(name = "TOURNAMENT_ID")
-    private String tournamentId;
+    @ManyToOne
+    @JoinColumn(name = "TOURNAMENT_ID")
+    private Tournament tournament;
 
-    @Column(name = "LEAGUE_CODE")
-    private String leagueCode;
+    @ManyToOne
+    @JoinColumn(name = "LEAGUE_ID")
+    private League league;
 
-    @Column(name = "NUMBER")
+    @Column(name = "NUMBER", length = 2)
     private Long number;
 
-    @Column(name = "STATE")
+    @Column(name = "STATE", length = 20)
     private String state;
 
-    @Column(name = "BLUE_TEAM")
-    private String blueTeam;
+    @ManyToOne
+    @JoinColumn(name = "BLUE_TEAM_ID")
+    private Team blueTeam;
 
-    @Column(name = "RED_TEAM")
-    private String redTeam;
+    @ManyToOne
+    @JoinColumn(name = "RED_TEAM_IO")
+    private Team redTeam;
 
-    @Column(name = "START_DATETIME")
+    @Column(name = "START_DATETIME", columnDefinition = "datetime")
     private LocalDateTime startTime;
 
-    @Column(name = "START_MILLIS")
+    @Column(name = "START_MILLIS", length = 10)
     private Long startMillis;
 
-    @Column(name = "END_MILLIS")
+    @Column(name = "END_MILLIS", length = 10)
     private Long endMillis;
 
+    @Lob
     @Column(name = "MATCH_HISTORY_URL")
     private String matchHistoryUrl;
+
+    @CreationTimestamp
+    @Column(name = "CREATE_DTM", nullable = false, updatable = false, columnDefinition = "timestamp")
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
+    private LocalDateTime updateDateTime;
 }

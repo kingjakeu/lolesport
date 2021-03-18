@@ -3,7 +3,9 @@ package com.kingjakeu.lolesport.api.info.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kingjakeu.lolesport.api.info.dao.LeagueRepository;
 import com.kingjakeu.lolesport.api.info.dao.TeamRepository;
+import com.kingjakeu.lolesport.api.info.domain.League;
 import com.kingjakeu.lolesport.api.info.domain.Team;
 import com.kingjakeu.lolesport.api.info.dto.LolEsportDataDto;
 import com.kingjakeu.lolesport.api.info.dto.team.TeamDataDto;
@@ -17,24 +19,16 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class TeamInfoService {
-    private final TeamRepository teamRepository;
 
-    public Team createTeam(){
-        Team team = Team.builder()
-                .name("jake")
-                .league("LCK")
-                .build();
-        return this.teamRepository.save(team);
-    }
+    private final TeamRepository teamRepository;
+    private final LeagueRepository leagueRepository;
 
     public void crawlLckTeams(){
         try {
@@ -45,7 +39,7 @@ public class TeamInfoService {
                 for(Element link : headerLinks){
                     Team team = Team.builder()
                             .name(link.text())
-                            .league("LCK")
+                            //.league("LCK")
                             .build();
                     this.teamRepository.save(team);
                 }
@@ -55,21 +49,25 @@ public class TeamInfoService {
         }
     }
 
-    public void newCrawl() throws JsonProcessingException {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("hl", "ko-KR");
-        String result = HttpRequester.doGet(
-                CrawlUrl.TEAM_INFO_LIST.getUrl(),
-                CrawlUrl.TEAM_INFO_LIST.getHttpHeader(),
-                parameters
-        );
-        LolEsportDataDto<TeamDataDto> resultDto = new ObjectMapper().readValue(result, new TypeReference<>() {});
-        ArrayList<TeamDto> teamDtoList = resultDto.getData().getTeams();
-        List<TeamDto> qualifiedTeams = new ArrayList<>();
+    public void crawlTeams(String leagueName) throws JsonProcessingException {
+        Optional<League> leagueOptional = this.leagueRepository.findByName(leagueName);
+        if(leagueOptional.isEmpty()) return;
+
+        final League league = leagueOptional.get();
+
+        List<TeamDto> teamDtoList = this.crawlRawAllTeams();
         for(TeamDto teamDto : teamDtoList){
-            if(teamDto.isLckTeam()){
-                qualifiedTeams.add(teamDto);
+            if(teamDto.isActiveTeam() && teamDto.leagueNameEqualsTo(league.getName())){
+                this.teamRepository.save(teamDto.toTeamEntity(league));
             }
         }
+    }
+
+    public List<TeamDto> crawlRawAllTeams() throws JsonProcessingException {
+        Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
+        LolEsportDataDto<TeamDataDto> resultDto = Crawler.doGetObject(
+                CrawlUrl.TEAM_INFO_LIST, parameters, new TypeReference<>() {});
+        return resultDto.getData()
+                .getTeams();
     }
 }

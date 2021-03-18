@@ -7,40 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class TestService {
-
-    @Autowired
-    private TeamInfoService teamInfoService;
+class PlayerInfoServiceTest {
 
     @Autowired
     private PlayerInfoService playerInfoService;
 
     @Test
-    public void createTeamTest(){
-        this.teamInfoService.createTeam();
-    }
-
-    @Test
-    public void crawlLckTeamsTest(){
-        this.teamInfoService.crawlLckTeams();
-    }
-
-    @Test
-    public void crawlLckPlayer(){
-        this.playerInfoService.crawlLckPlayers();
-    }
-
-    @Test
-    public void crawlPlayer(){
-        this.playerInfoService.crawlPlayer("/Kiin");
-    }
-
-    @Test
-    public void newCrawlTest(){
+    void crawlPlayersByTeam() {
         try {
-            this.teamInfoService.newCrawl();
+            this.playerInfoService.crawlPlayersByTeam("100725845018863243");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

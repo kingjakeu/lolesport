@@ -48,15 +48,49 @@ public class MatchInfoService {
     }
 
     public void crawlLeagueTournamentInfos(String leagueId) throws JsonProcessingException {
+
+        final League league = this.findLeagueById(leagueId);
+
         Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
-        parameters.put("leagueId", leagueId);
+        parameters.put("leagueId", league.getId());
 
         LolEsportDataDto<TournamentDataDto> resultDto = Crawler.doGetObject(
                 CrawlUrl.TOURNAMENT_LIST, parameters, new TypeReference<>() {});
 
         TournamentLeagueDto tournamentLeagueDto = resultDto.getData().getLeagues().get(0);
 
-        this.tournamentRepository.saveAll(tournamentLeagueDto.toTournamentEntities());
+        this.tournamentRepository.saveAll(tournamentLeagueDto.toTournamentEntities(league));
+    }
+
+    public void crawlLeagueSchedules(String leagueId) throws JsonProcessingException {
+
+        final League league = this.findLeagueById(leagueId);
+
+        Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
+        parameters.put("leagueId", league.getId());
+        ScheduleDto scheduleDto = this.crawlLeagueSchedule(parameters);
+
+        List<Match> matches = new ArrayList<>();
+        for(ScheduleEventDto eventDto : scheduleDto.getEvents()){
+            if(eventDto.isNotInProgress()){
+                matches.add(eventDto.toMatchEntity(league));
+            }
+        }
+
+        while (scheduleDto.getPages().getOlder() != null) {
+            parameters.put("pageToken", scheduleDto.getPages().getOlder());
+            scheduleDto = this.crawlLeagueSchedule(parameters);
+            for(ScheduleEventDto eventDto : scheduleDto.getEvents()){
+                matches.add(eventDto.toMatchEntity(league));
+            }
+        }
+        this.matchRepository.saveAll(matches);
+    }
+
+    private League findLeagueById(String leagueId){
+        Optional<League> leagueOptional = this.leagueRepository.findById(leagueId);
+        if (leagueOptional.isEmpty()) return null;
+        return leagueOptional.get();
     }
 
     private ScheduleDto crawlLeagueSchedule(Map<String, String> parameters) throws JsonProcessingException {
@@ -65,26 +99,6 @@ public class MatchInfoService {
 
         return resultDto.getData()
                 .getSchedule();
-    }
-
-    public void crawlLeagueSchedules(String leagueId) throws JsonProcessingException {
-        Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
-        parameters.put("leagueId", leagueId);
-        ScheduleDto scheduleDto = this.crawlLeagueSchedule(parameters);
-
-        List<Match> matches = new ArrayList<>();
-        for(ScheduleEventDto eventDto : scheduleDto.getEvents()){
-            matches.add(eventDto.toMatchEntity());
-        }
-
-        while (scheduleDto.getPages().getOlder() != null) {
-            parameters.put("pageToken", scheduleDto.getPages().getOlder());
-            scheduleDto = this.crawlLeagueSchedule(parameters);
-            for(ScheduleEventDto eventDto : scheduleDto.getEvents()){
-                matches.add(eventDto.toMatchEntity());
-            }
-        }
-        this.matchRepository.saveAll(matches);
     }
 
     public void crawlMatchEvents() throws JsonProcessingException {
