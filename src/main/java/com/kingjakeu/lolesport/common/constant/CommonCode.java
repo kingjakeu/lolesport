@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum CommonCode {
     TEAM_STATUS_ACTIVE("active"),
     STATE_IN_PROGRESS("inProgress"),
+    STATE_UNNEEDED("unneeded"),
+    STATE_COMPLETED("completed"),
     ;
     private final String code;
     CommonCode(String code){

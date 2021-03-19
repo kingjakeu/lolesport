@@ -52,8 +52,8 @@ class MatchInfoServiceTest {
         }
     }
 
-    //@Test
-   // @Order(4)
+    @Test
+    @Order(4)
     void testCrawlMatchEvents() {
         try{
             this.matchInfoService.crawlMatchGameEvents();
@@ -67,6 +67,33 @@ class MatchInfoServiceTest {
         try {
             this.matchInfoService.crawlMatchGameEvent("105522984812916145");
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void crawlTournamentMatchGameEvents() {
+        try {
+            this.matchInfoService.crawlTournamentMatchGameEvents("105522984810490982");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void crawlMatchHistoryLinks() {
+        try {
+            this.matchInfoService.crawlLckMatchHistoryLink("105522984812916176");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void crawlAllMatchHistoryLinks() {
+        try {
+            this.matchInfoService.crawlAllLckMatchHistoryLink();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -1,16 +1,15 @@
 package com.kingjakeu.lolesport.api.info.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,6 +54,7 @@ public class Game {
     @Column(name = "END_MILLIS", length = 10)
     private Long endMillis;
 
+    @Setter
     @Lob
     @Column(name = "MATCH_HISTORY_URL")
     private String matchHistoryUrl;

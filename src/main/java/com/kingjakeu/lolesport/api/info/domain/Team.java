@@ -46,4 +46,8 @@ public class Team {
     @UpdateTimestamp
     @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updateDateTime;
+
+    public boolean crawlKeyEqualsTo(String crawlKey){
+        return this.crawlKey.equals(crawlKey);
+    }
 }

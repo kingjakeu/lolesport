@@ -1,5 +1,6 @@
 package com.kingjakeu.lolesport.api.info.dto.game;
 
+import com.kingjakeu.lolesport.common.constant.CommonCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -47,4 +48,7 @@ public class GameDto {
         return vods.isEmpty() ? null : vods.get(0).getEndMillis();
     }
 
+    public boolean isUnneeded(){
+        return CommonCode.STATE_UNNEEDED.codeEqualsTo(this.state);
+    }
 }

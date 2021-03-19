@@ -23,20 +23,22 @@ public class GameEventDto {
 
         List<Game> games = new ArrayList<>();
         for(GameDto gameDto : this.match.getGames()){
-            games.add(Game.builder()
-                    .id(gameDto.getId())
-                    .match(tempMatch)
-                    .tournament(this.tournament.toTournamentEntity())
-                    .league(this.league.toLeagueEntity())
-                    .number(gameDto.getNumber())
-                    .state(gameDto.getState())
-                    .blueTeam(gameDto.getBlueTeam().toTeamEntity())
-                    .redTeam(gameDto.getRedTeam().toTeamEntity())
-                    .startTime(gameDto.getStartTime())
-                    .startMillis(gameDto.getStartMillis())
-                    .endMillis(gameDto.getEndMillis())
-                    .build()
-            );
+            if(!gameDto.isUnneeded()){
+                games.add(Game.builder()
+                        .id(gameDto.getId())
+                        .match(tempMatch)
+                        .tournament(this.tournament.toTournamentEntity())
+                        .league(this.league.toLeagueEntity())
+                        .number(gameDto.getNumber())
+                        .state(gameDto.getState())
+                        .blueTeam(gameDto.getBlueTeam().toTeamEntity())
+                        .redTeam(gameDto.getRedTeam().toTeamEntity())
+                        .startTime(gameDto.getStartTime())
+                        .startMillis(gameDto.getStartMillis())
+                        .endMillis(gameDto.getEndMillis())
+                        .build()
+                );
+            }
         }
         return games;
     }
