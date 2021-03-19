@@ -1,11 +1,11 @@
 package com.kingjakeu.lolesport.api.info.dto.matchHistory;
 
-import com.kingjakeu.lolesport.api.info.dto.matchHistory.BanDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @ToString
@@ -27,4 +27,21 @@ public class TeamDto {
     private Integer riftHeraldKills;
     private Integer dominionVictoryScore;
     private ArrayList<BanDto> bans;
+
+    public boolean isBlueTeam(){
+        return this.teamId.equals(100L);
+    }
+
+    public boolean isRedTeam(){
+        return this.teamId.equals(200L);
+    }
+
+    public List<String> getBanChampionKeyList(){
+        List<String> banChampionKeyList = new ArrayList<>();
+
+        for(BanDto banDto : this.bans){
+            banChampionKeyList.add(banDto.getChampionId().toString());
+        }
+        return banChampionKeyList;
+    }
 }

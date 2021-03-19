@@ -8,6 +8,9 @@ public enum CommonCode {
     STATE_IN_PROGRESS("inProgress"),
     STATE_UNNEEDED("unneeded"),
     STATE_COMPLETED("completed"),
+
+    BLUE_SIDE("BLUE"),
+    RED_SIDE("RED"),
     ;
     private final String code;
     CommonCode(String code){

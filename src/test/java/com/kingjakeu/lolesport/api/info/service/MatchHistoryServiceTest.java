@@ -17,17 +17,6 @@ class MatchHistoryServiceTest {
     private MatchHistoryService matchHistoryService;
 
     @Test
-    void crawlMatchHistory() {
-        try {
-            matchHistoryService.crawlMatchHistory("https://acs.leagueoflegends.com/v1/stats/game/ESPORTSTMNT01/1885163?gameHash=21d6065b9600a6d9");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     void crawlGameTimeLine() {
         try{
             matchHistoryService.crawlGameTimeLine("https://acs.leagueoflegends.com/v1/stats/game/ESPORTSTMNT01/1896701/timeline?gameHash=b5f757080fbc9aed");
