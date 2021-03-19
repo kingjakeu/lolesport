@@ -5,8 +5,8 @@ spring:
     datasource:
         url: jdbc:mariadb://lolesport.cgcrmk7vdleu.ap-northeast-2.rds.amazonaws.com:3306/lolesports
         driver-class-name: org.mariadb.jdbc.Driver
-        username: lolesports
-        password: lol2012
+        username: admin #lolesports
+        password: aktmxj12! #lol2012
     jpa:
         show-sql: true
         properties:

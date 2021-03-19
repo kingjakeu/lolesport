@@ -37,6 +37,14 @@ public enum  CrawlUrl {
             CrawlUrl.lolEsportHeader()
     ),
 
+    MATCH_HISTORY_PAGE_BASE("http://matchhistory.na.leagueoflegends.com/en/#match-details"),
+    MATCH_HISTORY_API_BASE("https://acs.leagueoflegends.com/v1/stats/game"),
+
+    GAME_COMPONENT_BASE("https://ddragon.leagueoflegends.com/cdn/{patch-version}/data/{language-nation}/{component}json"),
+    GAME_COMPONENT_CHAMPION("champion"),
+    GAME_COMPONENT_MASTERY("mastery"),
+    GAME_COMPONENT_ITEM("https://ddragon.leagueoflegends.com/cdn/7.23.1/data/en_US/mastery.json"),
+
     ;
     private final String url;
     private Map<String, String> httpHeader;

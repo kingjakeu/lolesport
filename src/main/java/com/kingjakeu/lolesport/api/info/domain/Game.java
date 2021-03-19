@@ -66,4 +66,8 @@ public class Game {
     @UpdateTimestamp
     @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updateDateTime;
+
+    public boolean isMatchHistoryLinkEmpty(){
+        return this.matchHistoryUrl == null;
+    }
 }

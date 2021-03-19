@@ -38,7 +38,6 @@ public class Crawler {
         return new ObjectMapper().readValue(result, typeReference);
     }
 
-
     public static Map<String, String> createCommonLolEsportParameters(){
         Map<String, String> parameters = new HashMap<>();
         parameters.put("hl", "ko-KR");

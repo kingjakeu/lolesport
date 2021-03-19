@@ -22,6 +22,8 @@ class MatchHistoryServiceTest {
             matchHistoryService.crawlMatchHistory("https://acs.leagueoflegends.com/v1/stats/game/ESPORTSTMNT01/1885163?gameHash=21d6065b9600a6d9");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -30,6 +32,15 @@ class MatchHistoryServiceTest {
         try{
             matchHistoryService.crawlGameTimeLine("https://acs.leagueoflegends.com/v1/stats/game/ESPORTSTMNT01/1896701/timeline?gameHash=b5f757080fbc9aed");
         }catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void crawlGameMatchHistory() {
+        try {
+            this.matchHistoryService.crawlGameMatchHistory("105522984812916176");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
