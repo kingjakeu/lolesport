@@ -4,14 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kingjakeu.lolesport.common.constant.CommonError;
-import com.kingjakeu.lolesport.common.constant.CrawlUrl;
 import com.kingjakeu.lolesport.common.exception.CrawlException;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -39,10 +36,6 @@ public class Crawler {
         }
     }
 
-    public static <T> T doGetObject(CrawlUrl crawlUrl, Map<String, String> parameters, TypeReference<T> typeReference) {
-        return doGetObject(crawlUrl.getUrl(), crawlUrl.getHttpHeader(), parameters, typeReference);
-    }
-
     public static <T> T doGetObject(String url, Map<String, String> httpHeaders, Map<String, String> parameters, TypeReference<T> typeReference) {
         String result = HttpRequester.doGet(
                 url,
@@ -55,11 +48,5 @@ public class Crawler {
             e.printStackTrace();
             throw new CrawlException(CommonError.CRAWL_MAP_ERROR);
         }
-    }
-
-    public static Map<String, String> createCommonLolEsportParameters(){
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("hl", "ko-KR");
-        return parameters;
     }
 }
