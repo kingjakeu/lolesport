@@ -28,7 +28,7 @@ public class PlayerInfoService {
 
     private final PlayerRepository playerRepository;
 
-    public void crawlLckPlayersCrawlKeyword() throws Exception{
+    public void crawlLckPlayersCrawlKeyword() {
         Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
         Elements playerElements = doc.getElementsByClass("tournament-roster-player");
 
@@ -47,7 +47,7 @@ public class PlayerInfoService {
         }
     }
 
-    public void crawlPlayersDetailsInfo() throws IOException {
+    public void crawlPlayersDetailsInfo() {
         List<Player> playerList = this.playerRepository.findAll();
         for(Player player : playerList){
             if(player.getCrawlKey() != null){
@@ -64,7 +64,7 @@ public class PlayerInfoService {
         }
     }
 
-    public void crawlPlayersByTeam(String teamId) throws JsonProcessingException {
+    public void crawlPlayersByTeam(String teamId) {
         Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
         parameters.put("id", teamId);
         LolEsportDataDto<TeamDataDto> resultDto = Crawler.doGetObject(

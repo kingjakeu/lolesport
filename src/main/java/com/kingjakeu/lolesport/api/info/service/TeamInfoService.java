@@ -10,7 +10,9 @@ import com.kingjakeu.lolesport.api.info.domain.Team;
 import com.kingjakeu.lolesport.api.info.dto.LolEsportDataDto;
 import com.kingjakeu.lolesport.api.info.dto.team.TeamDataDto;
 import com.kingjakeu.lolesport.api.info.dto.team.TeamDto;
+import com.kingjakeu.lolesport.common.constant.CommonError;
 import com.kingjakeu.lolesport.common.constant.CrawlUrl;
+import com.kingjakeu.lolesport.common.exception.ResourceNotFoundException;
 import com.kingjakeu.lolesport.common.util.Crawler;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.nodes.Attributes;
@@ -31,33 +33,27 @@ public class TeamInfoService {
     private final PlayerRepository playerRepository;
 
     public void crawlLckTeamsCrawlKeyword(){
-        try {
-            Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
-            Elements roasterHeaders = doc.getElementsByClass("tournament-roster-header");
-            for(Element header : roasterHeaders){
-                Elements headerLinks = header.getElementsByTag("a");
-                Attributes attributes = headerLinks.get(0).attributes();
+        Document doc = Crawler.doGetDocument(CrawlUrl.LCK_TEAM_LIST.getUrl());
+        Elements roasterHeaders = doc.getElementsByClass("tournament-roster-header");
+        for(Element header : roasterHeaders){
+            Elements headerLinks = header.getElementsByTag("a");
+            Attributes attributes = headerLinks.get(0).attributes();
 
-                String teamName = attributes.get("data-to-titles").split("\\|\\|")[0];
+            String teamName = attributes.get("data-to-titles").split("\\|\\|")[0];
 
-                Team team = this.findTeamByName(teamName);
-                team.setCrawlKey(attributes.get("href"));
+            Team team = this.findTeamByName(teamName);
+            team.setCrawlKey(attributes.get("href"));
 
-                this.teamRepository.save(team);
-            }
-        }catch (IOException ioe){
-            ioe.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            this.teamRepository.save(team);
         }
     }
-    private Team findTeamByName(String teamName) throws Exception {
+    private Team findTeamByName(String teamName) {
         Optional<Team> teamOptional = this.teamRepository.findByName(teamName);
-        if(teamOptional.isEmpty()) throw new Exception("ERROR");
+        if(teamOptional.isEmpty()) throw new ResourceNotFoundException(CommonError.TEAM_INFO_NOT_FOUND);
         return teamOptional.get();
     }
 
-    public void crawlTeamsAndPlayers(String leagueName) throws JsonProcessingException {
+    public void crawlTeamsAndPlayers(String leagueName) {
         Optional<League> leagueOptional = this.leagueRepository.findByName(leagueName);
         if(leagueOptional.isEmpty()) return;
 
@@ -72,7 +68,7 @@ public class TeamInfoService {
         }
     }
 
-    public List<TeamDto> crawlRawAllTeams() throws JsonProcessingException {
+    public List<TeamDto> crawlRawAllTeams() {
         Map<String, String> parameters = Crawler.createCommonLolEsportParameters();
         LolEsportDataDto<TeamDataDto> resultDto = Crawler.doGetObject(
                 CrawlUrl.TEAM_INFO_LIST, parameters, new TypeReference<>() {});

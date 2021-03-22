@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -42,7 +41,7 @@ public class Game {
     private Team blueTeam;
 
     @ManyToOne
-    @JoinColumn(name = "RED_TEAM_IO")
+    @JoinColumn(name = "RED_TEAM_ID")
     private Team redTeam;
 
     @Column(name = "START_DATETIME", columnDefinition = "datetime")

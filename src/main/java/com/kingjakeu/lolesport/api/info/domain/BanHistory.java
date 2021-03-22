@@ -15,32 +15,17 @@ import java.time.LocalDateTime;
 @Table(name = "BAN_HISTORY")
 public class BanHistory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @EmbeddedId
+    private BanHistoryId banHistoryId;
 
+    @MapsId("gameId")
     @ManyToOne
     @JoinColumn(name = "GAME_ID")
     private Game game;
 
     @ManyToOne
-    @JoinColumn(name = "BAN_PICK_TEAM_ID")
-    private Team banPickTeam;
-
-    @ManyToOne
-    @JoinColumn(name = "OPP_TEAM_ID")
-    private Team oppositeTeam;
-
-    @ManyToOne
     @JoinColumn(name = "BAN_CHAMP_ID")
     private Champion bannedChampion;
-
-    @Column(name = "SIDE", length = 5)
-    private String side;
-
-    @Column(name = "BAN_TURN", length = 2)
-    private Integer banTurn;
 
     @Column(name = "PATCH_VER", length = 20)
     private String patchVersion;

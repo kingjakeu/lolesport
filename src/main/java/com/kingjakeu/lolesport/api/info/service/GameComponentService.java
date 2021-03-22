@@ -5,6 +5,8 @@ import com.kingjakeu.lolesport.api.config.dao.ConfigurationRepository;
 import com.kingjakeu.lolesport.api.config.domain.Configuration;
 import com.kingjakeu.lolesport.api.info.dao.ChampionRepository;
 import com.kingjakeu.lolesport.api.info.dto.champion.ChampionDataDto;
+import com.kingjakeu.lolesport.common.constant.CommonError;
+import com.kingjakeu.lolesport.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ public class GameComponentService {
 
     private final ChampionRepository championRepository;
 
-    public void crawlChampionData() throws Exception {
+    public void crawlChampionData() {
         String url = this.findConfig("GAME_COMPONENT_BASE").getValue();
         url = url.replace("{patch-version}", this.findConfig("GAME_COMPONENT_CHAMPION_PATCH").getValue());
         url = url.replace("{component}", this.findConfig("GAME_COMPONENT_CHAMPION").getValue());
@@ -29,9 +31,9 @@ public class GameComponentService {
         this.championRepository.saveAll(dataDto.toChampionEntities());
     }
     
-    private Configuration findConfig(String key) throws Exception {
+    private Configuration findConfig(String key) {
         Optional<Configuration> configurationOptional = this.configurationRepository.findById(key);
-        if(configurationOptional.isEmpty()) throw new Exception("ERROR");
+        if(configurationOptional.isEmpty()) throw new ResourceNotFoundException(CommonError.CONFIG_NOT_FOUND);
         return configurationOptional.get();
     }
 }
