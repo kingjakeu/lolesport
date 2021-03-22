@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface GameRepository extends JpaRepository<Game, String> {
     Optional<Game> findByIdAndState(String id, String state);
     List<Game> findAllByState(String state);
+    List<Game> findAllByMatchId(String matchId);
 }

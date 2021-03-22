@@ -20,7 +20,7 @@ public class TeamPlayerDto {
         return Player.builder()
                 .id(this.id)
                 .summonerName(this.summonerName)
-                .englishName(firstName + lastName)
+                .englishName(this.firstName.stripTrailing() + " " + this.lastName.stripTrailing())
                 .team(team)
                 .role(LolRole.findBySlugName(this.role))
                 .imageUrl(this.image)

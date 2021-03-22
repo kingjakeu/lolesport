@@ -34,8 +34,8 @@ public class Game {
     @JoinColumn(name = "LEAGUE_ID")
     private League league;
 
-    @Column(name = "NUMBER", length = 2)
-    private Long number;
+    @Column(name = "GAME_SEQ", length = 2)
+    private Integer sequence;
 
     @Column(name = "STATE", length = 20)
     private String state;

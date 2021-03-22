@@ -29,7 +29,7 @@ public class GameEventDto {
                         .match(tempMatch)
                         .tournament(this.tournament.toTournamentEntity())
                         .league(this.league.toLeagueEntity())
-                        .number(gameDto.getNumber())
+                        .sequence(gameDto.getNumber().intValue())
                         .state(gameDto.getState())
                         .blueTeam(gameDto.getBlueTeam().toTeamEntity())
                         .redTeam(gameDto.getRedTeam().toTeamEntity())

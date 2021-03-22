@@ -1,4 +1,4 @@
-package com.kingjakeu.lolesport.api.info.service;
+package com.kingjakeu.lolesport.api.crawl.service;
 
 import com.kingjakeu.lolesport.api.crawl.service.PlayerInfoCrawlService;
 import org.junit.jupiter.api.extension.ExtendWith;

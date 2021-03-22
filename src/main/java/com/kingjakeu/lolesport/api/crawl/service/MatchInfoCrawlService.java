@@ -134,6 +134,7 @@ public class MatchInfoCrawlService {
         if(eventDto.isNotInProgress()){
             Match match = eventDto.toMatchEntity();
             if(match.isStartDateBetween(tournament.getStartDate(), tournament.getEndDate())){
+                match.setTournament(tournament);
                 match.setTeam1(this.teamRepository.findByCode(match.getTeam1().getCode()));
                 match.setTeam2(this.teamRepository.findByCode(match.getTeam2().getCode()));
                 this.matchRepository.save(match);
@@ -219,7 +220,7 @@ public class MatchInfoCrawlService {
             }
         }
         if(!linkList.isEmpty()){
-            game.setMatchHistoryUrl(linkList.get((int) (game.getNumber()-1)));
+            game.setMatchHistoryUrl(linkList.get(game.getSequence()-1));
             this.gameRepository.save(game);
         }
     }

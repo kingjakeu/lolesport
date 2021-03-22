@@ -1,4 +1,4 @@
-package com.kingjakeu.lolesport.api.info.service;
+package com.kingjakeu.lolesport.api.crawl.service;
 
 import com.kingjakeu.lolesport.api.crawl.service.MatchHistoryCrawlService;
 import org.junit.jupiter.api.Test;
@@ -21,10 +21,5 @@ class MatchHistoryCrawlServiceTest {
 
     @Test
     void crawlGameMatchHistory() {
-        try {
-            this.matchHistoryCrawlService.crawlGameMatchHistory("105522984812916176");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

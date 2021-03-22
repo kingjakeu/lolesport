@@ -1,13 +1,12 @@
 package com.kingjakeu.lolesport.api.crawl.controller;
 
+import com.kingjakeu.lolesport.api.crawl.dto.request.MatchHistoryRequestDto;
+import com.kingjakeu.lolesport.api.crawl.service.MatchHistoryCrawlService;
 import com.kingjakeu.lolesport.api.crawl.service.MatchInfoCrawlService;
 import com.kingjakeu.lolesport.api.crawl.service.PlayerInfoCrawlService;
 import com.kingjakeu.lolesport.api.crawl.service.TeamInfoCrawlService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -19,6 +18,7 @@ public class CrawlController {
     private final MatchInfoCrawlService matchInfoCrawlService;
     private final TeamInfoCrawlService teamInfoCrawlService;
     private final PlayerInfoCrawlService playerInfoCrawlService;
+    private final MatchHistoryCrawlService matchHistoryCrawlService;
 
     @PostMapping(value = "/league")
     public void crawlAllLeagueInfo(){
@@ -26,17 +26,17 @@ public class CrawlController {
     }
 
     @PostMapping(value = "/tournament")
-    public void crawlTournamentInfo(@RequestBody String leagueId){
+    public void crawlTournamentInfo(@RequestParam String leagueId){
         this.matchInfoCrawlService.crawlLeagueTournamentInfos(leagueId);
     }
 
     @PostMapping(value = "/match")
-    public void crawlMatchInfos(@RequestBody String tournamentId){
+    public void crawlMatchInfos(@RequestParam String tournamentId){
         this.matchInfoCrawlService.crawlLeagueMatchSchedules(tournamentId);
     }
 
     @PostMapping(value = "/game")
-    public void crawlMatchGameEvents(@RequestBody Optional<String> matchId){
+    public void crawlMatchGameEvents(@RequestParam Optional<String> matchId){
         if(matchId.isEmpty()) {
             this.matchInfoCrawlService.crawlMatchGameEvents();
         }else {
@@ -45,7 +45,7 @@ public class CrawlController {
     }
 
     @PostMapping(value = "/match-history-link/lck")
-    public void crawlGameMatchHistoryLink(@RequestBody Optional<String> gameId){
+    public void crawlGameMatchHistoryLink(@RequestParam Optional<String> gameId){
         if(gameId.isEmpty()){
             this.matchInfoCrawlService.crawlAllLckMatchHistoryLink();
         }else{
@@ -53,18 +53,23 @@ public class CrawlController {
         }
     }
 
-    @PostMapping(value = "team-player")
-    public void crawlTeamAndPlayer(@RequestBody String leagueName){
+    @PostMapping(value = "/team-player")
+    public void crawlTeamAndPlayer(@RequestParam String leagueName){
         this.teamInfoCrawlService.crawlTeamsAndPlayers(leagueName);
     }
 
-    @PostMapping(value = "team/detail/lck")
+    @PostMapping(value = "/team/detail/lck")
     public void crawlLckTeamsDetail(){
         this.teamInfoCrawlService.crawlLckTeamsDetail();
     }
 
-    @PostMapping(value = "player/detail/lck")
+    @PostMapping(value = "/player/detail/lck")
     public void crawlLckPlayerDetail(){
         this.playerInfoCrawlService.crawlLckPlayersDetail();
+    }
+
+    @PostMapping(value = "/match-history")
+    public void crawlGameMatchHistoryInfo(@RequestBody MatchHistoryRequestDto requestDto){
+        this.matchHistoryCrawlService.crawlGameMatchHistory(requestDto);
     }
 }
