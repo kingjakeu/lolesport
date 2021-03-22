@@ -1,39 +1,60 @@
 package com.kingjakeu.lolesport.api.crawl.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.kingjakeu.lolesport.api.config.dao.ConfigurationRepository;
-import com.kingjakeu.lolesport.api.config.domain.InternalConfig;
 import com.kingjakeu.lolesport.api.champion.dao.ChampionRepository;
+import com.kingjakeu.lolesport.api.config.service.ConfigService;
 import com.kingjakeu.lolesport.api.crawl.dto.champion.ChampionDataDto;
-import com.kingjakeu.lolesport.common.constant.CommonError;
-import com.kingjakeu.lolesport.common.exception.ResourceNotFoundException;
+import com.kingjakeu.lolesport.api.crawl.dto.item.ItemDataDto;
+import com.kingjakeu.lolesport.api.crawl.dto.rune.ParentRuneDto;
+import com.kingjakeu.lolesport.api.item.dao.ItemRepository;
+import com.kingjakeu.lolesport.api.rune.dao.RuneRepository;
+import com.kingjakeu.lolesport.common.constant.CrawlUrlConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class GameComponentCrawlService {
 
     private final CrawlCommonService crawlCommonService;
-    private final ConfigurationRepository configurationRepository;
+    private final ConfigService configService;
 
     private final ChampionRepository championRepository;
+    private final ItemRepository itemRepository;
+    private final RuneRepository runeRepository;
 
     public void crawlChampionData() {
-        String url = this.findConfig("GAME_COMPONENT_BASE").getValue();
-        url = url.replace("{patch-version}", this.findConfig("GAME_COMPONENT_CHAMPION_PATCH").getValue());
-        url = url.replace("{component}", this.findConfig("GAME_COMPONENT_CHAMPION").getValue());
-        url = url.replace("{language-nation}", this.findConfig("GAME_COMPONENT_KOR").getValue());
+        String url = this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_BASE.name());
+        url = url.replace("{patch-version}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_CHAMPION_PATCH.name()));
+        url = url.replace("{component}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_CHAMPION.name()));
+        url = url.replace("{language-nation}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_KOR.name()));
 
         ChampionDataDto dataDto = this.crawlCommonService.crawlAcsMatchHistory(url, new TypeReference<>() {});
         this.championRepository.saveAll(dataDto.toChampionEntities());
     }
-    
-    private InternalConfig findConfig(String key) {
-        Optional<InternalConfig> configurationOptional = this.configurationRepository.findById(key);
-        if(configurationOptional.isEmpty()) throw new ResourceNotFoundException(CommonError.CONFIG_NOT_FOUND);
-        return configurationOptional.get();
+
+    public void crawlItemData(){
+        String url = this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_BASE.name());
+        url = url.replace("{patch-version}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_ITEM_PATCH.name()));
+        url = url.replace("{component}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_ITEM.name()));
+        url = url.replace("{language-nation}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_KOR.name()));
+
+        ItemDataDto dataDto = this.crawlCommonService.crawlAcsMatchHistory(url, new TypeReference<>() {});
+        this.itemRepository.saveAll(dataDto.toItemEntities());
     }
+
+    public void crawlRuneData(){
+        String url = this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_BASE.name());
+        url = url.replace("{patch-version}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_RUNE_PATCH.name()));
+        url = url.replace("{component}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_RUNE.name()));
+        url = url.replace("{language-nation}", this.configService.findConfigValue(CrawlUrlConfig.GAME_COMPONENT_KOR.name()));
+
+        ParentRuneDto[] dataDto = this.crawlCommonService.crawlAcsMatchHistory(url, new TypeReference<>() {});
+        for(ParentRuneDto runeDto : dataDto){
+            this.runeRepository.saveAll(runeDto.toRuneEntities());
+        }
+    }
+
+
 }

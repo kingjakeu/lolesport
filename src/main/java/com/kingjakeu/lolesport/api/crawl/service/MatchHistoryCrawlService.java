@@ -3,17 +3,14 @@ package com.kingjakeu.lolesport.api.crawl.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.kingjakeu.lolesport.api.ban.domain.BanHistory;
 import com.kingjakeu.lolesport.api.ban.domain.BanHistoryId;
-import com.kingjakeu.lolesport.api.champion.domain.Champion;
 import com.kingjakeu.lolesport.api.champion.service.ChampionCommonService;
 import com.kingjakeu.lolesport.api.config.dao.ConfigurationRepository;
-import com.kingjakeu.lolesport.api.config.domain.InternalConfig;
 import com.kingjakeu.lolesport.api.ban.dao.BanHistoryRepository;
-import com.kingjakeu.lolesport.api.champion.dao.ChampionRepository;
 import com.kingjakeu.lolesport.api.config.service.ConfigService;
 import com.kingjakeu.lolesport.api.crawl.dto.request.MatchHistoryRequestDto;
 import com.kingjakeu.lolesport.api.game.dao.GameRepository;
-import com.kingjakeu.lolesport.api.crawl.dto.matchHistory.MatchHistoryDto;
-import com.kingjakeu.lolesport.api.crawl.dto.matchHistory.TeamDto;
+import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.MatchHistoryDto;
+import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.TeamDto;
 import com.kingjakeu.lolesport.api.game.domain.Game;
 import com.kingjakeu.lolesport.api.game.service.GameCommonService;
 import com.kingjakeu.lolesport.common.constant.CommonCode;
@@ -23,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

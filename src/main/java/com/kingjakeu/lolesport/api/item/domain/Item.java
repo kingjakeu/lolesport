@@ -1,4 +1,4 @@
-package com.kingjakeu.lolesport.api.champion.domain;
+package com.kingjakeu.lolesport.api.item.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,17 +15,14 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "CHAMPION")
-public class Champion {
+@Table(name = "ITEM")
+public class Item {
 
     @Id
-    @Column(name = "ID", length = 50)
+    @Column(name = "ID", length = 5)
     private String id;
 
-    @Column(name = "CRAWL_KEY", length = 20)
-    private String crawlKey;
-
-    @Column(name = "CHAMP_NAME", length = 50)
+    @Column(name = "ITEM_NAME", length = 50)
     private String name;
 
     @Column(name = "PATCH_VER", length = 20)

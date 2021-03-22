@@ -1,4 +1,4 @@
-package com.kingjakeu.lolesport.api.crawl.dto.matchHistory;
+package com.kingjakeu.lolesport.api.crawl.dto.matchhistory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -20,10 +20,16 @@ class GameComponentCrawlServiceTest {
     GameRepository gameRepository;
     @Test
     void crawlChampionData() {
-        try {
-            this.gameComponentCrawlService.crawlChampionData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.gameComponentCrawlService.crawlChampionData();
+    }
+
+    @Test
+    void crawlItemData(){
+        this.gameComponentCrawlService.crawlItemData();
+    }
+
+    @Test
+    void crawlRuneData() {
+        this.gameComponentCrawlService.crawlRuneData();;
     }
 }
