@@ -37,7 +37,7 @@ public class Player {
     private LocalDate birthDay;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE", length = 5)
+    @Column(name = "LANE_ROLE", length = 5)
     private LolRole role;
 
     @ManyToOne

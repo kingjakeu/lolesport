@@ -3,8 +3,8 @@ package com.kingjakeu.lolesport.api.crawl.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.kingjakeu.lolesport.api.ban.domain.BanHistory;
 import com.kingjakeu.lolesport.api.ban.domain.BanHistoryId;
+import com.kingjakeu.lolesport.api.champion.domain.Champion;
 import com.kingjakeu.lolesport.api.champion.service.ChampionCommonService;
-import com.kingjakeu.lolesport.api.config.dao.ConfigurationRepository;
 import com.kingjakeu.lolesport.api.ban.dao.BanHistoryRepository;
 import com.kingjakeu.lolesport.api.config.service.ConfigService;
 import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.ParticipantDto;
@@ -12,12 +12,16 @@ import com.kingjakeu.lolesport.api.crawl.dto.request.MatchHistoryRequestDto;
 import com.kingjakeu.lolesport.api.game.dao.GameRepository;
 import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.MatchHistoryDto;
 import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.TeamDto;
-import com.kingjakeu.lolesport.api.game.domain.Game;
+import com.kingjakeu.lolesport.api.game.dao.PlayerGameSummaryRepository;
+import com.kingjakeu.lolesport.api.game.dao.TeamGameSummaryRepository;
+import com.kingjakeu.lolesport.api.game.domain.*;
 import com.kingjakeu.lolesport.api.game.service.GameCommonService;
 import com.kingjakeu.lolesport.api.pick.dao.PickHistoryRepository;
 import com.kingjakeu.lolesport.api.pick.domain.PickHistory;
 import com.kingjakeu.lolesport.api.pick.domain.PickHistoryId;
+import com.kingjakeu.lolesport.api.player.domain.Player;
 import com.kingjakeu.lolesport.api.player.service.PlayerCommonService;
+import com.kingjakeu.lolesport.api.team.domain.Team;
 import com.kingjakeu.lolesport.common.constant.CommonCode;
 import com.kingjakeu.lolesport.common.constant.CommonError;
 import com.kingjakeu.lolesport.common.constant.LolRole;
@@ -37,8 +41,12 @@ public class MatchHistoryCrawlService {
 
     private final ConfigService configService;
     private final GameCommonService gameCommonService;
+    private final GameRepository gameRepository;
     private final ChampionCommonService championCommonService;
     private final PlayerCommonService playerCommonService;
+    private final PlayerGameSummaryRepository playerGameSummaryRepository;
+    private final TeamGameSummaryRepository teamGameSummaryRepository;
+
 
     public void crawlGameTimeLine(String url) {
 //        TimeLineDto timeLineDto = Crawler.doGetObject(url, CrawlUrl.acsMatchHistoryHeader(), Collections.emptyMap(), new TypeReference<TimeLineDto>() {});
@@ -56,7 +64,8 @@ public class MatchHistoryCrawlService {
             throw new ResourceNotFoundException(CommonError.GAME_INFO_NOT_FOUND);
         }
     }
-    private void crawlGameMatchHistory(List<Game> gameList) {
+
+    public void crawlGameMatchHistory(List<Game> gameList) {
         for(Game game : gameList){
             this.crawlGameMatchHistory(game);
         }
@@ -70,8 +79,34 @@ public class MatchHistoryCrawlService {
         String url = game.getMatchHistoryUrl().replace(matchHistoryPageBaseUrl, matchHistoryApiBaseUrl);
         MatchHistoryDto matchHistoryDto = crawlCommonService.crawlAcsMatchHistory(url, new TypeReference<>() {});
 
+        if (game.getPatchVersion() == null){
+            game.setPatchVersion(matchHistoryDto.getGameVersion());
+            this.gameRepository.save(game);
+        }
+        this.saveTeamGameSummary(game, matchHistoryDto);
         this.refineBanLog(game, matchHistoryDto);
-        this.savePickHistory(game, matchHistoryDto);
+        this.saveParticipantData(game, matchHistoryDto);
+    }
+
+    public void saveTeamGameSummary(Game game, MatchHistoryDto matchHistoryDto){
+        this.saveTeamGameSummary(game, matchHistoryDto, CommonCode.BLUE_SIDE.getCode());
+        this.saveTeamGameSummary(game, matchHistoryDto, CommonCode.RED_SIDE.getCode());
+    }
+
+    private void saveTeamGameSummary(Game game, MatchHistoryDto matchHistoryDto, String side){
+        Team team = CommonCode.BLUE_SIDE.codeEqualsTo(side) ? game.getBlueTeam() : game.getRedTeam();
+
+        TeamGameSummaryId teamGameSummaryId = TeamGameSummaryId.builder()
+                .gameId(game.getId())
+                .teamId(team.getId())
+                .build();
+
+        TeamGameSummary teamGameSummary = matchHistoryDto.getBlueTeamDto().toTeamGameSummaryEntity();
+        teamGameSummary.setTeamGameSummaryId(teamGameSummaryId);
+        teamGameSummary.setGame(game);
+        teamGameSummary.setTeam(team);
+        teamGameSummary.setSide(side);
+        this.teamGameSummaryRepository.save(teamGameSummary);
     }
 
     public void refineBanLog(Game game, MatchHistoryDto matchHistoryDto) {
@@ -85,7 +120,12 @@ public class MatchHistoryCrawlService {
 
         int banTurn = 1;
         for(String champKey : banChampionKeyList){
-            BanHistoryId banHistoryId = BanHistoryId.builder().side(side).banTurn(banTurn++).build();
+            BanHistoryId banHistoryId = BanHistoryId.builder()
+                    .gameId(game.getId())
+                    .side(side)
+                    .banTurn(banTurn++)
+                    .build();
+
             BanHistory banHistory = BanHistory.builder()
                     .banHistoryId(banHistoryId)
                     .game(game)
@@ -95,24 +135,44 @@ public class MatchHistoryCrawlService {
             this.banHistoryRepository.save(banHistory);
         }
     }
-
-    private void savePickHistory(Game game, MatchHistoryDto matchHistoryDto){
+    private void saveParticipantData(Game game, MatchHistoryDto matchHistoryDto){
         int i = 0;
         for(ParticipantDto participantDto : matchHistoryDto.getParticipants()){
+            Player player = this.playerCommonService.findPlayerBySummonerName(
+                    matchHistoryDto.findSummonerNameById(participantDto.getParticipantId()));
+            Champion champion = this.championCommonService.findByCrawlKey(participantDto.getChampionId().toString());
+            String side = i < 5 ? CommonCode.BLUE_SIDE.getCode() : CommonCode.RED_SIDE.getCode();;
+            LolRole lolRole = LolRole.findBySequence(i);
+
             PickHistoryId pickHistoryId = PickHistoryId.builder()
-                    .role(LolRole.findBySequence(i))
-                    .side(i < 5 ? CommonCode.BLUE_SIDE.getCode() : CommonCode.RED_SIDE.getCode())
+                    .gameId(game.getId())
+                    .role(lolRole)
+                    .side(side)
                     .build();
-            String summonerName = matchHistoryDto.findSummonerNameById(participantDto.getParticipantId());
 
             PickHistory pickHistory = PickHistory.builder()
                     .pickHistoryId(pickHistoryId)
                     .game(game)
-                    .player(this.playerCommonService.findPlayerBySummonerName(summonerName))
-                    .champion(this.championCommonService.findByCrawlKey(participantDto.getChampionId().toString()))
+                    .player(player)
+                    .champion(champion)
                     .patchVersion(matchHistoryDto.getGameVersion())
                     .build();
             this.pickHistoryRepository.save(pickHistory);
+
+            PlayerGameSummaryId playerGameSummaryId = PlayerGameSummaryId.builder()
+                    .gameId(game.getId())
+                    .playerId(player.getId())
+                    .build();
+
+            PlayerGameSummary playerGameSummary = participantDto.getStats().toPlayerGameSummaryEntity();
+            playerGameSummary.setPlayerGameSummaryId(playerGameSummaryId);
+            playerGameSummary.setGame(game);
+            playerGameSummary.setPlayer(player);
+            playerGameSummary.setChampion(champion);
+            playerGameSummary.setSide(side);
+            playerGameSummary.setRole(lolRole);
+            this.playerGameSummaryRepository.save(playerGameSummary);
+
             i += 1;
         }
     }

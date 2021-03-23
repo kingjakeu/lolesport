@@ -18,7 +18,8 @@ public class ParentRuneDto {
 
     public List<Rune> toRuneEntities(){
         List<Rune> runeList = new ArrayList<>();
-        for(RuneSlotDto runeSlotDto : slots){
+        runeList.add(Rune.builder().id(this.id.toString()).name(this.name).build());
+        for(RuneSlotDto runeSlotDto : this.slots){
             runeList.addAll(runeSlotDto.toRunEntities());
         }
         return runeList;

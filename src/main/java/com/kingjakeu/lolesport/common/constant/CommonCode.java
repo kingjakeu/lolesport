@@ -11,6 +11,7 @@ public enum CommonCode {
 
     BLUE_SIDE("BLUE"),
     RED_SIDE("RED"),
+    WIN("Win")
     ;
     private final String code;
     CommonCode(String code){

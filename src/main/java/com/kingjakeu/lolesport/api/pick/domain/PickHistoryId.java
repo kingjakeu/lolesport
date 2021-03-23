@@ -20,14 +20,15 @@ public class PickHistoryId implements Serializable {
     private String gameId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE", length = 5)
+    @Column(name = "LANE_ROLE", length = 5)
     private LolRole role;
 
     @Column(name = "SIDE", length = 5)
     private String side;
 
     @Builder
-    private PickHistoryId(LolRole role, String side){
+    private PickHistoryId(String gameId, LolRole role, String side){
+        this.gameId = gameId;
         this.role = role;
         this.side = side;
     }

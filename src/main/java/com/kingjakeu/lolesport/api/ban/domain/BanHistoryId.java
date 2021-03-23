@@ -23,7 +23,8 @@ public class BanHistoryId implements Serializable {
     private String side;
 
     @Builder
-    public BanHistoryId(Integer banTurn, String side){
+    public BanHistoryId(String gameId, Integer banTurn, String side){
+        this.gameId = gameId;
         this.banTurn = banTurn;
         this.side = side;
     }

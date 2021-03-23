@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Match, String> {
     List<Match> findAllByStartTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
+    List<Match> findAllByBlockName(String blockName);
 }

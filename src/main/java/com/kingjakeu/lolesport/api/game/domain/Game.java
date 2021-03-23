@@ -48,6 +48,10 @@ public class Game {
     @JoinColumn(name = "RED_TEAM_ID")
     private Team redTeam;
 
+    @Setter
+    @Column(name = "PATCH_VER", length = 20)
+    private String patchVersion;
+
     @Column(name = "START_DATETIME", columnDefinition = "datetime")
     private LocalDateTime startTime;
 

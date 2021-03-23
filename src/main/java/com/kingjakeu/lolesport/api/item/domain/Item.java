@@ -35,4 +35,8 @@ public class Item {
     @UpdateTimestamp
     @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updateDateTime;
+
+    public Item(Long id){
+        this.id = id.toString();
+    }
 }

@@ -1,8 +1,14 @@
 package com.kingjakeu.lolesport.api.crawl.dto.matchhistory;
 
+import com.kingjakeu.lolesport.api.game.domain.PlayerGameSummary;
+import com.kingjakeu.lolesport.api.game.domain.PlayerGameSummaryId;
+import com.kingjakeu.lolesport.api.item.domain.Item;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @ToString
@@ -112,4 +118,72 @@ public class StatDto {
     private Long statPerk0;
     private Long statPerk1;
     private Long statPerk2;
+
+    public PlayerGameSummary toPlayerGameSummaryEntity(){
+        return PlayerGameSummary.builder()
+                .champLevel(this.champLevel)
+                .items(this.getItemList())
+                .parentRunes(this.getParentRunes())
+                .subRunes(this.getSubRunes())
+                .statRunes(this.getStatRunes())
+                .kill(this.kills)
+                .death(this.deaths)
+                .assist(this.assists)
+                .totalDamageDealt(this.totalDamageDealt)
+                .totalDamageDealtToChampion(this.totalDamageDealtToChampions)
+                .totalDamageTaken(this.totalDamageTaken)
+                .totalHeal(this.totalHeal)
+                .damageDealtToObject(this.damageDealtToObjectives)
+                .damageDealtToTurret(this.damageDealtToTurrets)
+                .totalGoldEarned(this.goldEarned)
+                .totalMinionKilled(this.totalMinionsKilled)
+                .turretKill(this.turretKills)
+                .totalJungleMinionKilled(this.neutralMinionsKilled)
+                .teamJungleMinionKilled(this.neutralMinionsKilledTeamJungle)
+                .enemyJungleMinionKilled(this.neutralMinionsKilledEnemyJungle)
+                .visionWardBuyCount(this.visionWardsBoughtInGame)
+                .sightWardBuyCount(this.sightWardsBoughtInGame)
+                .wardPlaced(this.wardsPlaced)
+                .wardKilled(this.wardsKilled)
+                .visionScore(this.visionScore)
+                .build();
+    }
+    
+    private List<String> getItemList(){
+        List<String> itemList = new ArrayList<>();
+        if(this.item0 != null) itemList.add(this.item0.toString());
+        if(this.item1 != null) itemList.add(this.item1.toString());
+        if(this.item2 != null) itemList.add(this.item2.toString());
+        if(this.item3 != null) itemList.add(this.item3.toString());
+        if(this.item4 != null) itemList.add(this.item4.toString());
+        if(this.item5 != null) itemList.add(this.item5.toString());
+        if(this.item6 != null) itemList.add(this.item6.toString());
+        return itemList;
+    }
+
+    private List<String> getParentRunes(){
+        List<String> runeList = new ArrayList<>();
+        runeList.add(this.perkPrimaryStyle.toString());
+        runeList.add(this.perkSubStyle.toString());
+        return runeList;
+    }
+
+    private List<String> getSubRunes(){
+        List<String> runeList = new ArrayList<>();
+        runeList.add(this.perk0.toString());
+        runeList.add(this.perk1.toString());
+        runeList.add(this.perk2.toString());
+        runeList.add(this.perk3.toString());
+        runeList.add(this.perk4.toString());
+        runeList.add(this.perk5.toString());
+        return runeList;
+    }
+
+    private List<String> getStatRunes(){
+        List<String> statRunes = new ArrayList<>();
+        statRunes.add(this.statPerk0.toString());
+        statRunes.add(this.statPerk1.toString());
+        statRunes.add(this.statPerk2.toString());
+        return statRunes;
+    }
 }

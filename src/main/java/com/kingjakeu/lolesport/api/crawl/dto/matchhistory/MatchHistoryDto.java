@@ -24,7 +24,7 @@ public class MatchHistoryDto {
     private ArrayList<ParticipantDto> participants;
     private ArrayList<ParticipantIdentityDto> participantIdentities;
 
-    private Map<Long, String> participantIdMap = new HashMap<>();
+    private Map<Long, String> participantIdMap;
 
     public TeamDto getBlueTeamDto(){
         for (TeamDto teamDto : this.teams){
@@ -41,7 +41,8 @@ public class MatchHistoryDto {
     }
 
     public String findSummonerNameById(Long id){
-        if(this.participantIdMap.isEmpty()){
+        if(this.participantIdMap == null){
+            this.participantIdMap = new HashMap<>();
             for(ParticipantIdentityDto identityDto : this.participantIdentities){
                 this.participantIdMap.put(identityDto.getParticipantId(), identityDto.getPlayer().getRefinedSummonerName());
             }
