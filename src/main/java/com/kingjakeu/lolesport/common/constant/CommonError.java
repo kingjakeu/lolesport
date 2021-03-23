@@ -19,7 +19,9 @@ public enum CommonError {
 
     CHAMP_NOT_FOUND("CHP0001", "champion not found"),
 
-    TEAM_INFO_NOT_FOUND("TEM0001", "Team info not found")
+    TEAM_INFO_NOT_FOUND("TEM0001", "Team info not found"),
+
+    PLAYER_INFO_NOT_FOUND("PLY0001", "Player info not found"),
 
     ;
     private final String code;

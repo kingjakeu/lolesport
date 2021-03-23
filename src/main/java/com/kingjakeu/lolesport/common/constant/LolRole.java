@@ -37,4 +37,21 @@ public enum LolRole {
         }
         return NF;
     }
+
+    public static LolRole findBySequence(int seq){
+        switch (seq){
+            case 0: case 5:
+                return TOP;
+            case 1: case  6:
+                return JUG;
+            case 2: case 7:
+                return MID;
+            case 3: case 8:
+                return BOT;
+            case 4: case 9:
+                return SUP;
+            default:
+                return NF;
+        }
+    }
 }

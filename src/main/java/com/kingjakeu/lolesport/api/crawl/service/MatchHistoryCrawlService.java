@@ -7,14 +7,20 @@ import com.kingjakeu.lolesport.api.champion.service.ChampionCommonService;
 import com.kingjakeu.lolesport.api.config.dao.ConfigurationRepository;
 import com.kingjakeu.lolesport.api.ban.dao.BanHistoryRepository;
 import com.kingjakeu.lolesport.api.config.service.ConfigService;
+import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.ParticipantDto;
 import com.kingjakeu.lolesport.api.crawl.dto.request.MatchHistoryRequestDto;
 import com.kingjakeu.lolesport.api.game.dao.GameRepository;
 import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.MatchHistoryDto;
 import com.kingjakeu.lolesport.api.crawl.dto.matchhistory.TeamDto;
 import com.kingjakeu.lolesport.api.game.domain.Game;
 import com.kingjakeu.lolesport.api.game.service.GameCommonService;
+import com.kingjakeu.lolesport.api.pick.dao.PickHistoryRepository;
+import com.kingjakeu.lolesport.api.pick.domain.PickHistory;
+import com.kingjakeu.lolesport.api.pick.domain.PickHistoryId;
+import com.kingjakeu.lolesport.api.player.service.PlayerCommonService;
 import com.kingjakeu.lolesport.common.constant.CommonCode;
 import com.kingjakeu.lolesport.common.constant.CommonError;
+import com.kingjakeu.lolesport.common.constant.LolRole;
 import com.kingjakeu.lolesport.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,13 +32,13 @@ import java.util.List;
 public class MatchHistoryCrawlService {
 
     private final CrawlCommonService crawlCommonService;
-    private final GameRepository gameRepository;
     private final BanHistoryRepository banHistoryRepository;
-    private final ConfigurationRepository configurationRepository;
+    private final PickHistoryRepository pickHistoryRepository;
 
     private final ConfigService configService;
     private final GameCommonService gameCommonService;
     private final ChampionCommonService championCommonService;
+    private final PlayerCommonService playerCommonService;
 
     public void crawlGameTimeLine(String url) {
 //        TimeLineDto timeLineDto = Crawler.doGetObject(url, CrawlUrl.acsMatchHistoryHeader(), Collections.emptyMap(), new TypeReference<TimeLineDto>() {});
@@ -65,6 +71,7 @@ public class MatchHistoryCrawlService {
         MatchHistoryDto matchHistoryDto = crawlCommonService.crawlAcsMatchHistory(url, new TypeReference<>() {});
 
         this.refineBanLog(game, matchHistoryDto);
+        this.savePickHistory(game, matchHistoryDto);
     }
 
     public void refineBanLog(Game game, MatchHistoryDto matchHistoryDto) {
@@ -86,6 +93,27 @@ public class MatchHistoryCrawlService {
                     .patchVersion(matchHistoryDto.getGameVersion())
                     .build();
             this.banHistoryRepository.save(banHistory);
+        }
+    }
+
+    private void savePickHistory(Game game, MatchHistoryDto matchHistoryDto){
+        int i = 0;
+        for(ParticipantDto participantDto : matchHistoryDto.getParticipants()){
+            PickHistoryId pickHistoryId = PickHistoryId.builder()
+                    .role(LolRole.findBySequence(i))
+                    .side(i < 5 ? CommonCode.BLUE_SIDE.getCode() : CommonCode.RED_SIDE.getCode())
+                    .build();
+            String summonerName = matchHistoryDto.findSummonerNameById(participantDto.getParticipantId());
+
+            PickHistory pickHistory = PickHistory.builder()
+                    .pickHistoryId(pickHistoryId)
+                    .game(game)
+                    .player(this.playerCommonService.findPlayerBySummonerName(summonerName))
+                    .champion(this.championCommonService.findByCrawlKey(participantDto.getChampionId().toString()))
+                    .patchVersion(matchHistoryDto.getGameVersion())
+                    .build();
+            this.pickHistoryRepository.save(pickHistory);
+            i += 1;
         }
     }
 }

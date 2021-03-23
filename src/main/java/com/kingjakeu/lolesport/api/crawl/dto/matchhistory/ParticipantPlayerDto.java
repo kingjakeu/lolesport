@@ -10,4 +10,8 @@ import lombok.ToString;
 public class ParticipantPlayerDto {
     private String summonerName;
     private Long profileIcon;
+
+    public String getRefinedSummonerName(){
+        return this.summonerName.split(" ")[1];
+    }
 }
