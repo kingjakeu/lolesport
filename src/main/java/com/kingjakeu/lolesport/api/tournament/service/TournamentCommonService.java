@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TournamentService {
+public class TournamentCommonService {
     private final TournamentRepository tournamentRepository;
 
     public Tournament findTournamentById(String id){

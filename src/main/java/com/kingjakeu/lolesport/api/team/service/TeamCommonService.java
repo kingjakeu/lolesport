@@ -1,5 +1,6 @@
 package com.kingjakeu.lolesport.api.team.service;
 
+import com.kingjakeu.lolesport.api.league.domain.League;
 import com.kingjakeu.lolesport.api.team.dao.TeamRepository;
 import com.kingjakeu.lolesport.api.team.domain.Team;
 import com.kingjakeu.lolesport.common.constant.CommonError;
@@ -7,6 +8,7 @@ import com.kingjakeu.lolesport.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +20,9 @@ public class TeamCommonService {
         Optional<Team> teamOptional = this.teamRepository.findByName(teamName);
         if(teamOptional.isEmpty()) throw new ResourceNotFoundException(CommonError.TEAM_INFO_NOT_FOUND);
         return teamOptional.get();
+    }
+
+    public List<Team> findAllTeamByLeague(League league){
+        return this.teamRepository.findAllByLeagueId(league.getId());
     }
 }

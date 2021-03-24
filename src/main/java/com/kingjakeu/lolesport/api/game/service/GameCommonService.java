@@ -2,6 +2,8 @@ package com.kingjakeu.lolesport.api.game.service;
 
 import com.kingjakeu.lolesport.api.game.dao.GameRepository;
 import com.kingjakeu.lolesport.api.game.domain.Game;
+import com.kingjakeu.lolesport.api.match.domain.Match;
+import com.kingjakeu.lolesport.common.constant.CommonCode;
 import com.kingjakeu.lolesport.common.constant.CommonError;
 import com.kingjakeu.lolesport.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +26,9 @@ public class GameCommonService {
 
     public List<Game> findGameByMatchId(String matchId){
        return this.gameRepository.findAllByMatchId(matchId);
+    }
+
+    public List<Game> findCompletedGameByMatch(Match match){
+        return this.gameRepository.findAllByMatchAndState(match, CommonCode.STATE_COMPLETED.getCode());
     }
 }

@@ -1,12 +1,14 @@
 package com.kingjakeu.lolesport.api.crawl.dto.schedule;
 
 import com.kingjakeu.lolesport.api.match.domain.Match;
+import com.kingjakeu.lolesport.api.standing.domain.Standing;
 import com.kingjakeu.lolesport.common.constant.CommonCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
 @Getter
 @NoArgsConstructor
@@ -18,6 +20,7 @@ public class ScheduleEventDto {
     private String type;
     private ScheduleLeagueDto league;
     private ScheduleMatchDto match;
+    private ArrayList<ScheduleGameDto> games;
 
     public boolean isNotInProgress(){
         return !CommonCode.STATE_IN_PROGRESS.codeEqualsTo(this.state);
@@ -33,4 +36,5 @@ public class ScheduleEventDto {
                 .state(this.state)
                 .build();
     }
+
 }

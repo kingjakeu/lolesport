@@ -1,0 +1,2 @@
+### 토너먼트 순위
+GET http://localhost:8080/standing?tournamentId=105522984810490982

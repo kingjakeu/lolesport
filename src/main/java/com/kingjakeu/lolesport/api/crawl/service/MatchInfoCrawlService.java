@@ -20,7 +20,7 @@ import com.kingjakeu.lolesport.api.crawl.dto.schedule.ScheduleEventDto;
 import com.kingjakeu.lolesport.api.crawl.dto.tournament.TournamentDataDto;
 import com.kingjakeu.lolesport.api.crawl.dto.tournament.TournamentLeagueDto;
 import com.kingjakeu.lolesport.api.league.service.LeagueCommonService;
-import com.kingjakeu.lolesport.api.tournament.service.TournamentService;
+import com.kingjakeu.lolesport.api.tournament.service.TournamentCommonService;
 import com.kingjakeu.lolesport.common.constant.CommonCode;
 import com.kingjakeu.lolesport.common.constant.CommonError;
 import com.kingjakeu.lolesport.common.constant.CrawlUrlConfig;
@@ -47,7 +47,7 @@ public class MatchInfoCrawlService {
     private final LeagueCommonService leagueCommonService;
     private final LeagueRepository leagueRepository;
 
-    private final TournamentService tournamentService;
+    private final TournamentCommonService tournamentCommonService;
     private final TournamentRepository tournamentRepository;
 
     private final CrawlCommonService crawlCommonService;
@@ -93,7 +93,7 @@ public class MatchInfoCrawlService {
      * @param tournamentId 토너먼트 아이디
      */
     public void crawlLeagueMatchSchedules(String tournamentId)  {
-        final Tournament tournament = this.tournamentService.findTournamentById(tournamentId);
+        final Tournament tournament = this.tournamentCommonService.findTournamentById(tournamentId);
         final League league = tournament.getLeague();
         
         Map<String, String> parameters = this.crawlCommonService.createCommonLolEsportParameters();
