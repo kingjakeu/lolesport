@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 public class Champion {
 
     @Id
-    @Column(name = "ID", length = 50)
+    @Column(name = "ID", length = 20)
     private String id;
 
-    @Column(name = "CRAWL_KEY", length = 20)
-    private String crawlKey;
+    @Column(name = "CHAMP_KEY", length = 50)
+    private String champKey;
 
     @Column(name = "CHAMP_NAME", length = 50)
     private String name;

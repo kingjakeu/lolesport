@@ -129,7 +129,7 @@ public class MatchHistoryCrawlService {
             BanHistory banHistory = BanHistory.builder()
                     .banHistoryId(banHistoryId)
                     .game(game)
-                    .bannedChampion(this.championCommonService.findByCrawlKey(champKey))
+                    .bannedChampion(this.championCommonService.findById(champKey))
                     .patchVersion(matchHistoryDto.getGameVersion())
                     .build();
             this.banHistoryRepository.save(banHistory);
@@ -140,8 +140,8 @@ public class MatchHistoryCrawlService {
         for(ParticipantDto participantDto : matchHistoryDto.getParticipants()){
             Player player = this.playerCommonService.findPlayerBySummonerName(
                     matchHistoryDto.findSummonerNameById(participantDto.getParticipantId()));
-            Champion champion = this.championCommonService.findByCrawlKey(participantDto.getChampionId().toString());
-            String side = i < 5 ? CommonCode.BLUE_SIDE.getCode() : CommonCode.RED_SIDE.getCode();;
+            Champion champion = this.championCommonService.findById(participantDto.getChampionId().toString());
+            String side = i < 5 ? CommonCode.BLUE_SIDE.getCode() : CommonCode.RED_SIDE.getCode();
             LolRole lolRole = LolRole.findBySequence(i);
 
             PickHistoryId pickHistoryId = PickHistoryId.builder()

@@ -23,9 +23,9 @@ public class ChampionDto {
 
     public Champion toChampionEntity(){
         return Champion.builder()
-                .id(this.id)
+                .id(this.key)
                 .name(this.name)
-                .crawlKey(this.key)
+                .champKey(this.id)
                 .patchVersion(this.version)
                 .build();
     }

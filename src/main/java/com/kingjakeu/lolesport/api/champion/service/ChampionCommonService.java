@@ -15,8 +15,14 @@ public class ChampionCommonService {
 
     private final ChampionRepository championRepository;
 
-    public Champion findByCrawlKey(String crawlKey) {
-        Optional<Champion> optionalChampion = this.championRepository.findByCrawlKey(crawlKey);
+    public Champion findById(String id){
+        Optional<Champion> optionalChampion = this.championRepository.findById(id);
+        if(optionalChampion.isEmpty()) throw new ResourceNotFoundException(CommonError.CHAMP_NOT_FOUND);
+        return optionalChampion.get();
+    }
+
+    public Champion findByChampKey(String crawlKey) {
+        Optional<Champion> optionalChampion = this.championRepository.findByChampKey(crawlKey);
         if(optionalChampion.isEmpty()) throw new ResourceNotFoundException(CommonError.CHAMP_NOT_FOUND);
         return optionalChampion.get();
     }

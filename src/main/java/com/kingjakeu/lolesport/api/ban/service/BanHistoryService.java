@@ -1,11 +1,14 @@
 package com.kingjakeu.lolesport.api.ban.service;
 
 import com.kingjakeu.lolesport.api.ban.dao.BanHistoryRepository;
-import com.kingjakeu.lolesport.api.ban.domain.BanHistory;
+import com.kingjakeu.lolesport.api.ban.dto.ChampBanInfoDto;
+import com.kingjakeu.lolesport.api.ban.dto.response.TournamentTeamChampBanResDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -13,20 +16,22 @@ public class BanHistoryService {
 
     private final BanHistoryRepository banHistoryRepository;
 
-    public void mostBans(String patchVersion){
-        List<BanHistory> banHistoryList = this.banHistoryRepository.findAllByPatchVersion(patchVersion);
-        Map<String, Integer> banCounts = new LinkedHashMap<>();
+    /**
+     * 팀별 토너먼트 Most(5) 밴 챔피언 정보
+     * @param tournamentId 토너먼트 아이디
+     * @param teamId 팀 아이디
+     * @return 밴 챔피언 정보
+     */
+    public TournamentTeamChampBanResDto findMostBanByTeamInTournament(String tournamentId, String teamId){
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "banCount"));
+        Page<ChampBanInfoDto> champBanInfoDtoPage = this.banHistoryRepository.findChampBanInfoInTournamentByTeamId(
+                tournamentId, teamId, pageable
+        );
 
-        for(BanHistory banHistory : banHistoryList){
-            String key = banHistory.getBannedChampion().getId();
-            if(banCounts.containsKey(key)){
-                banCounts.put(key, banCounts.get(key) +1);
-            }else{
-                banCounts.put(key, 1);
-            }
-        }
-        List<Map.Entry<String, Integer>> entryList = new ArrayList<>(banCounts.entrySet());
-        Collections.sort(entryList, Comparator.comparing(Map.Entry::getValue));
-        System.out.println(banCounts);
+        return TournamentTeamChampBanResDto.builder()
+                .tournamentId(tournamentId)
+                .teamId(teamId)
+                .bannedChampList(champBanInfoDtoPage.getContent())
+                .build();
     }
 }
