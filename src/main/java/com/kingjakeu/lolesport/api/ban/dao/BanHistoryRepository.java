@@ -19,10 +19,15 @@ public interface BanHistoryRepository extends JpaRepository<BanHistory, Long> {
             "count(bh) as banCount)" +
             " from BanHistory bh" +
             " where bh.game.tournament.id = :tournamentId " +
-            " and (bh.game.blueTeam.id = :teamId or bh.game.redTeam.id = :teamId)" +
+            " and (" +
+            "       (bh.game.blueTeam.id = :teamId and bh.banHistoryId.side = :blueFlag) " +
+            "       or (bh.game.redTeam.id = :teamId and bh.banHistoryId.side = :redFlag)" +
+            "   )" +
             " group by bh.bannedChampion.id"
     )
     Page<ChampBanInfoDto> findChampBanInfoInTournamentByTeamId(@Param("tournamentId") String tournamentId,
                                                                @Param("teamId") String teamId,
+                                                               @Param("blueFlag") String blueFlag,
+                                                               @Param("redFlag") String redFlag,
                                                                Pageable pageable);
 }

@@ -2,6 +2,7 @@ package com.kingjakeu.lolesport.api.ban.domain;
 
 import com.kingjakeu.lolesport.api.champion.domain.Champion;
 import com.kingjakeu.lolesport.api.game.domain.Game;
+import com.kingjakeu.lolesport.api.team.domain.Team;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

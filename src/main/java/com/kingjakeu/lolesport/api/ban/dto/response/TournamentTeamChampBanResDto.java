@@ -11,8 +11,9 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
+@ToString
 public class TournamentTeamChampBanResDto {
-    private String tournamentId;
-    private String teamId;
-    private List<ChampBanInfoDto> bannedChampList;
+    private final String tournamentId;
+    private final String teamId;
+    private final List<ChampBanInfoDto> bannedChampList;
 }

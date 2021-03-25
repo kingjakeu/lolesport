@@ -3,6 +3,7 @@ package com.kingjakeu.lolesport.api.ban.service;
 import com.kingjakeu.lolesport.api.ban.dao.BanHistoryRepository;
 import com.kingjakeu.lolesport.api.ban.dto.ChampBanInfoDto;
 import com.kingjakeu.lolesport.api.ban.dto.response.TournamentTeamChampBanResDto;
+import com.kingjakeu.lolesport.common.constant.CommonCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class BanHistoryService {
     public TournamentTeamChampBanResDto findMostBanByTeamInTournament(String tournamentId, String teamId){
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "banCount"));
         Page<ChampBanInfoDto> champBanInfoDtoPage = this.banHistoryRepository.findChampBanInfoInTournamentByTeamId(
-                tournamentId, teamId, pageable
+                tournamentId, teamId, CommonCode.BLUE_SIDE.getCode(), CommonCode.RED_SIDE.getCode(), pageable
         );
 
         return TournamentTeamChampBanResDto.builder()

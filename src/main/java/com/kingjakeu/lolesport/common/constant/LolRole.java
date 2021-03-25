@@ -2,6 +2,9 @@ package com.kingjakeu.lolesport.common.constant;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 public enum LolRole {
     TOP("Top Laner", "top"),
@@ -53,5 +56,9 @@ public enum LolRole {
             default:
                 return NF;
         }
+    }
+
+    public static List<LolRole> playerValues(){
+        return Arrays.asList(LolRole.TOP, LolRole.JUG, LolRole.MID, LolRole.BOT, LolRole.SUP);
     }
 }

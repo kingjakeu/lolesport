@@ -27,5 +27,7 @@ class BanHistoryServiceTest {
                 "105522984810490982",
                 "99566404585387054"
         );
+
+        System.out.println(result.toString());
     }
 }
