@@ -1,2 +1,5 @@
 ### 토너먼트 순위
 GET http://localhost:8080/standing?tournamentId=105522984810490982
+
+###
+GET http://localhost:8080/pick/tournament/105522984810490982/team/99566404585387054/most
