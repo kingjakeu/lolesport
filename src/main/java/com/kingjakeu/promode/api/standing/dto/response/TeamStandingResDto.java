@@ -9,6 +9,7 @@ public class TeamStandingResDto {
     private String teamId;
     private String teamCode;
     private String teamName;
+    private String teamSlug;
     private Integer matchWin;
     private Integer matchLoss;
     private Integer gameWin;
@@ -19,6 +20,7 @@ public class TeamStandingResDto {
         this.teamId = standing.getTeam().getId();
         this.teamCode = standing.getTeam().getCode();
         this.teamName = standing.getTeam().getName();
+        this.teamSlug = standing.getTeam().getSlug();
         this.matchWin = standing.getMatchWin();
         this.matchLoss = standing.getMatchLoss();
         this.gameWin = standing.getGameWin();

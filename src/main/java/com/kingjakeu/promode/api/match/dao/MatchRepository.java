@@ -4,6 +4,7 @@ import com.kingjakeu.promode.api.match.domain.Match;
 import com.kingjakeu.promode.api.tournament.domain.Tournament;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

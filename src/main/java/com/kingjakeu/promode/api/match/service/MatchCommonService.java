@@ -6,6 +6,7 @@ import com.kingjakeu.promode.api.tournament.domain.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,5 +16,9 @@ public class MatchCommonService {
 
     public List<Match> findAllByTournament(Tournament tournament){
         return this.matchRepository.findAllByTournament(tournament);
+    }
+
+    public List<Match> findAllBetweenStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime){
+        return this.matchRepository.findAllByStartTimeBetween(startTime, endTime);
     }
 }

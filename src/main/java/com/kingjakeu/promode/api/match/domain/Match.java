@@ -2,6 +2,7 @@ package com.kingjakeu.promode.api.match.domain;
 
 import com.kingjakeu.promode.api.tournament.domain.Tournament;
 import com.kingjakeu.promode.api.team.domain.Team;
+import com.kingjakeu.promode.common.constant.CommonCode;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -61,6 +62,10 @@ public class Match {
     public boolean isStartDateBetween(LocalDate startDate, LocalDate endDate){
         return (this.startTime.toLocalDate().isEqual(startDate) || this.startTime.toLocalDate().isAfter(startDate))
                 && (this.startTime.toLocalDate().isEqual(endDate) || this.startTime.toLocalDate().isBefore(endDate));
+    }
+
+    public boolean isCompleted(){
+        return CommonCode.STATE_COMPLETED.codeEqualsTo(this.state);
     }
 }
 

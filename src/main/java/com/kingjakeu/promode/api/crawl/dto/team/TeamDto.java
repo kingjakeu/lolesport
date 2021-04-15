@@ -41,7 +41,7 @@ public class TeamDto {
                  .name(this.name)
                  .slug(this.slug)
                  .league(league)
-                 .imageUrl(this.image)
+                 .imageUrl(this.alternativeImage)
                  .build();
     }
 
