@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +21,8 @@ class MatchServiceTest {
 
     @Test
     void getMatch() {
-        List<MatchResultResDto> matchResultResDtoList = this.matchService.getMatch("20210318");
+        LocalDate localDate = LocalDate.parse("2021-03-18");
+        List<MatchResultResDto> matchResultResDtoList = this.matchService.getMatch(localDate);
         for(MatchResultResDto resultResDto : matchResultResDtoList){
             System.out.println(resultResDto.toString());
         }

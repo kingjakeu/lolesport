@@ -11,6 +11,7 @@ import com.kingjakeu.promode.common.constant.DateTimeFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,9 @@ public class MatchService {
     private final GameCommonService gameCommonService;
     private final TeamGameCommonService teamGameCommonService;
 
-    public List<MatchResultResDto>  getMatch(String matchDate){
-        LocalDateTime startTime = LocalDateTime.parse(matchDate+"000000", DateTimeFormat.REQUEST_DATETIME);
-        LocalDateTime endTime = LocalDateTime.parse(matchDate+"235959", DateTimeFormat.REQUEST_DATETIME);
+    public List<MatchResultResDto> getMatch(LocalDate matchDate){
+        LocalDateTime startTime = matchDate.atStartOfDay();
+        LocalDateTime endTime =  matchDate.atTime(23, 59, 59);
 
         List<Match> matchList = this.matchCommonService.findAllBetweenStartTimeAndEndTime(startTime, endTime);
         List<MatchResultResDto> matchResultResDtoList = new ArrayList<>();
