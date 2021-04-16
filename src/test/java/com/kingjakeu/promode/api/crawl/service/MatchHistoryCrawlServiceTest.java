@@ -15,7 +15,7 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class MatchHistoryCrawlServiceTest {
+class   MatchHistoryCrawlServiceTest {
 
     @Autowired
     private MatchHistoryCrawlService matchHistoryCrawlService;

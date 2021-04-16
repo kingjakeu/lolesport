@@ -71,7 +71,7 @@ public class MatchHistoryCrawlService {
         }
     }
 
-    private void crawlGameMatchHistory(Game game) {
+    public void crawlGameMatchHistory(Game game) {
         if(game.isMatchHistoryLinkEmpty()) throw new ResourceNotFoundException(CommonError.GAME_MATCH_INFO_NOT_FOUND);
 
         String matchHistoryPageBaseUrl = this.configService.findConfigValue("MATCH_HISTORY_PAGE_BASE");
@@ -101,7 +101,10 @@ public class MatchHistoryCrawlService {
                 .teamId(team.getId())
                 .build();
 
-        TeamGameSummary teamGameSummary = matchHistoryDto.getBlueTeamDto().toTeamGameSummaryEntity();
+        TeamGameSummary teamGameSummary =  CommonCode.BLUE_SIDE.codeEqualsTo(side) ?
+                matchHistoryDto.getBlueTeamDto().toTeamGameSummaryEntity()
+                : matchHistoryDto.getRedTeamDto().toTeamGameSummaryEntity();
+
         teamGameSummary.setTeamGameSummaryId(teamGameSummaryId);
         teamGameSummary.setGame(game);
         teamGameSummary.setTeam(team);

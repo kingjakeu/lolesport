@@ -2,7 +2,9 @@ package com.kingjakeu.promode.api.match.dto.response;
 
 import lombok.Builder;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 public class MatchResultResDto {
     private String matchId;
     private String state;
@@ -10,9 +12,7 @@ public class MatchResultResDto {
     private MatchTeamResDto blueTeam;
     private MatchTeamResDto redTeam;
 
-    @Setter
     private Integer blueScore;
-    @Setter
     private Integer redScore;
 
     @Builder
@@ -26,5 +26,16 @@ public class MatchResultResDto {
         this.startTime = startTime;
         this.blueTeam = blueTeam;
         this.redTeam = redTeam;
+        this.blueScore = 0;
+        this.redScore = 0;
     }
+
+    public void addBlueScore(){
+        this.blueScore += 1;
+    }
+
+    public void addRedScore(){
+        this.redScore += 1;
+    }
+
 }

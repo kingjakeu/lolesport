@@ -78,4 +78,8 @@ public class TeamGameSummary {
     @UpdateTimestamp
     @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updateDateTime;
+
+    public boolean isWin(){
+        return this.win;
+    }
 }

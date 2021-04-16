@@ -51,4 +51,8 @@ public class Team {
     public boolean crawlKeyEqualsTo(String crawlKey){
         return this.crawlKey.equals(crawlKey);
     }
+
+    public boolean idEqualsTo(String id){
+        return this.id.equals(id);
+    }
 }

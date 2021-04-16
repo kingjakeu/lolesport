@@ -11,4 +11,5 @@ import java.util.List;
 public interface TeamGameSummaryRepository extends JpaRepository<TeamGameSummary, TeamGameSummaryId> {
     int countAllByGameInAndTeamAndWin(List<Game> gameList, Team team, boolean win);
     int countAllByGameIn(List<Game> gameList);
+    List<TeamGameSummary> findAllByGame(Game game);
 }

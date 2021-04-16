@@ -2,6 +2,7 @@ package com.kingjakeu.promode.api.game.service;
 
 import com.kingjakeu.promode.api.game.dao.TeamGameSummaryRepository;
 import com.kingjakeu.promode.api.game.domain.Game;
+import com.kingjakeu.promode.api.game.domain.TeamGameSummary;
 import com.kingjakeu.promode.api.team.domain.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class TeamGameCommonService {
 
     public int countTeamWinInGameList(Team team, List<Game> gameList){
         return this.teamGameSummaryRepository.countAllByGameInAndTeamAndWin(gameList, team, true);
+    }
+
+    public List<TeamGameSummary> findTeamGameSummaryByGame(Game game){
+        return this.teamGameSummaryRepository.findAllByGame(game);
     }
 }
