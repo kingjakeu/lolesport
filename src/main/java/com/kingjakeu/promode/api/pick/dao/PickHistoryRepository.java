@@ -34,4 +34,6 @@ public interface PickHistoryRepository extends JpaRepository<PickHistory, PickHi
                                                                             @Param("redFlag") String redFlag,
                                                                             @Param("laneRole") LolRole laneRole,
                                                                             Pageable pageable);
+    List<PickHistory> findPickHistoriesByChampionIdAndGameIn(String champId, List<Game> gameList);
 }
+

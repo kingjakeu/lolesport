@@ -22,8 +22,4 @@ public class PickHistoryController {
                                                                        @PathVariable String teamId){
         return this.pickHistoryInfoService.findMostPickByTeamInTournament(tournamentId, teamId);
     }
-
-    public void getBestPickOfTheWeek(){
-
-    }
 }

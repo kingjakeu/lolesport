@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.kingjakeu.promode.api.game.domain.QTeamGameSummary.teamGameSummary;
 import static com.kingjakeu.promode.api.pick.domain.QPickHistory.pickHistory;
 
 @Repository
@@ -22,17 +23,6 @@ public class PickHistoryRepositorySupport extends QuerydslRepositorySupport {
     public PickHistoryRepositorySupport(JPAQueryFactory jpaQueryFactory){
         super(PickHistory.class);
         this.jpaQueryFactory = jpaQueryFactory;
-    }
-
-    public List<ChampPickInfoDto> findByChamp(){
-        NumberPath<Long> aliasPickCount = Expressions.numberPath(Long.class, "pickCount");
-        return jpaQueryFactory
-                .select(Projections.constructor(ChampPickInfoDto.class,
-                        pickHistory.champion.id, pickHistory.count().as(aliasPickCount)))
-                .from(pickHistory)
-                .groupBy(pickHistory.champion)
-                .orderBy(aliasPickCount.desc())
-                .fetch();
     }
 
     public List<ChampPickInfoDto> findChampPickByLaneAndGameList(LolRole lolRole, List<Game> gameList){
@@ -47,5 +37,15 @@ public class PickHistoryRepositorySupport extends QuerydslRepositorySupport {
                 .groupBy(pickHistory.champion)
                 .orderBy(aliasPickCount.desc())
                 .fetch();
+    }
+
+    public Long countGameResultByChampIdAndGameList(String champId, List<Game> gameList, Boolean winFlag){
+        return this.jpaQueryFactory
+                .select(teamGameSummary.count())
+                .from(pickHistory)
+                .innerJoin(teamGameSummary)
+                .on(pickHistory.game.eq(teamGameSummary.game), pickHistory.pickHistoryId.side.eq(teamGameSummary.side), teamGameSummary.win.eq(winFlag))
+                .where(pickHistory.champion.id.eq(champId), pickHistory.game.in(gameList))
+                .fetchOne();
     }
 }

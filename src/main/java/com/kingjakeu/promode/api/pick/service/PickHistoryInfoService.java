@@ -2,10 +2,12 @@ package com.kingjakeu.promode.api.pick.service;
 
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.game.service.GameCommonService;
+import com.kingjakeu.promode.api.game.service.TeamGameCommonService;
 import com.kingjakeu.promode.api.match.domain.Match;
 import com.kingjakeu.promode.api.match.service.MatchCommonService;
 import com.kingjakeu.promode.api.pick.dao.PickHistoryRepository;
 import com.kingjakeu.promode.api.pick.dao.PickHistoryRepositorySupport;
+import com.kingjakeu.promode.api.pick.domain.PickHistory;
 import com.kingjakeu.promode.api.pick.dto.BestChampLanePickDto;
 import com.kingjakeu.promode.api.pick.dto.ChampPickInfoDto;
 import com.kingjakeu.promode.common.constant.CommonCode;
@@ -45,20 +47,30 @@ public class PickHistoryInfoService {
         return result;
     }
 
-    public void getBestPickOfTheWeek(LocalDate matchDate){
+    /**
+     * 금주 베스트 챔피언 픽 조회
+     * @param matchDate 경기 날짜
+     * @return 베스트 픽
+     */
+    public Map<String, ChampPickInfoDto> getBestPickOfTheWeek(LocalDate matchDate){
         List<Match> matchList = this.matchCommonService.findAllByMatchDate(matchDate);
         List<Game> gameList = new LinkedList<>();
         for(Match match : matchList){
             gameList.addAll(this.gameCommonService.findCompletedGameByMatch(match));
         }
-//
-//        BestChampLanePickDto bestPickDto = BestChampLanePickDto.builder()
-//                .top()
 
+        Map<String, ChampPickInfoDto> bestChampPick = new LinkedHashMap<>();
         for(LolRole lolRole : LolRole.playerValues()){
-            List<ChampPickInfoDto> result = this.pickHistoryRepositorySupport.findChampPickByLaneAndGameList(lolRole, gameList);
-            System.out.println(result);
-        }
+            List<ChampPickInfoDto> result = this.pickHistoryRepositorySupport
+                    .findChampPickByLaneAndGameList(lolRole, gameList);
+            //TODO
+            ChampPickInfoDto champPickInfoDto = result.get(0);
+            Long winCount = this.pickHistoryRepositorySupport
+                    .countGameResultByChampIdAndGameList(champPickInfoDto.getId(), gameList, true);
+            champPickInfoDto.computeWinRate(winCount);
 
+            bestChampPick.put(lolRole.getSlugName(), champPickInfoDto);
+        }
+        return bestChampPick;
     }
 }

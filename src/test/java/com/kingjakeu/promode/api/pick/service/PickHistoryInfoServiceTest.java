@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -33,6 +34,7 @@ class PickHistoryInfoServiceTest {
 
     @Test
     void test(){
-        this.pickHistoryInfoService.getBestPickOfTheWeek(LocalDate.parse("2021-03-19"));
+        Map<String, ChampPickInfoDto>  result = this.pickHistoryInfoService.getBestPickOfTheWeek(LocalDate.parse("2021-03-19"));
+        System.out.println(result);
     }
 }
