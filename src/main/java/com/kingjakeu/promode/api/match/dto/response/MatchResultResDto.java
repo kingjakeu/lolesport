@@ -1,14 +1,18 @@
 package com.kingjakeu.promode.api.match.dto.response;
 
+import com.kingjakeu.promode.api.game.domain.TeamGameSummary;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString
 public class MatchResultResDto {
     private String matchId;
     private String state;
-    private String startTime;
+    private LocalDateTime startTime;
     private MatchTeamResDto blueTeam;
     private MatchTeamResDto redTeam;
 
@@ -18,7 +22,7 @@ public class MatchResultResDto {
     @Builder
     public MatchResultResDto(String matchId,
                              String state,
-                             String startTime,
+                             LocalDateTime startTime,
                              MatchTeamResDto blueTeam,
                              MatchTeamResDto redTeam){
         this.matchId = matchId;
@@ -30,11 +34,24 @@ public class MatchResultResDto {
         this.redScore = 0;
     }
 
-    public void addBlueScore(){
+    public void calculateGameScore(List<TeamGameSummary> teamGameList){
+        for(TeamGameSummary teamGameSummary : teamGameList){
+            if(this.blueTeam.getId().equals(teamGameSummary.getTeamGameSummaryId().getTeamId())
+                    && teamGameSummary.isWin()) {
+                this.addBlueScore();
+            }
+            if(this.redTeam.getId().equals(teamGameSummary.getTeamGameSummaryId().getTeamId())
+                    && teamGameSummary.isWin()) {
+                this.addRedScore();
+            }
+        }
+    }
+
+    private void addBlueScore(){
         this.blueScore += 1;
     }
 
-    public void addRedScore(){
+    private void addRedScore(){
         this.redScore += 1;
     }
 

@@ -12,6 +12,8 @@ import com.kingjakeu.promode.api.team.domain.Team;
 import com.kingjakeu.promode.api.team.service.TeamCommonService;
 import com.kingjakeu.promode.api.tournament.domain.Tournament;
 import com.kingjakeu.promode.api.tournament.service.TournamentCommonService;
+import com.kingjakeu.promode.common.constant.CommonError;
+import com.kingjakeu.promode.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -83,4 +85,9 @@ public class StandingCommonService {
         this.standingRepository.saveAll(standingList);
     }
 
+    public Standing findStandingByTeam(Team team){
+        Optional<Standing> optionalStanding = this.standingRepository.findByTeam(team);
+        if(optionalStanding.isEmpty()) throw new ResourceNotFoundException(CommonError.STANDING_INFO_NOT_FOUND);
+        return optionalStanding.get();
+    }
 }

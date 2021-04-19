@@ -23,6 +23,8 @@ public enum CommonError {
 
     PLAYER_INFO_NOT_FOUND("PLY0001", "Player info not found"),
 
+    STANDING_INFO_NOT_FOUND("STD0001", "Standing info not found"),
+
     ;
     private final String code;
     private final String message;

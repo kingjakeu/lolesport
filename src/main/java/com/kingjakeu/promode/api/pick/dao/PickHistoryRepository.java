@@ -1,5 +1,6 @@
 package com.kingjakeu.promode.api.pick.dao;
 
+import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.pick.domain.PickHistory;
 import com.kingjakeu.promode.api.pick.domain.PickHistoryId;
 import com.kingjakeu.promode.api.pick.dto.ChampPickInfoDto;
@@ -9,6 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import javax.persistence.OrderBy;
+import java.util.List;
+import java.util.Map;
 
 public interface PickHistoryRepository extends JpaRepository<PickHistory, PickHistoryId> {
 

@@ -11,7 +11,8 @@ public enum CommonCode {
 
     BLUE_SIDE("BLUE"),
     RED_SIDE("RED"),
-    WIN("Win")
+    WIN("Win"),
+    TIMEZONE_OFFSET("+9"),
     ;
     private final String code;
     CommonCode(String code){

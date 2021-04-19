@@ -1,5 +1,8 @@
 package com.kingjakeu.promode.api.pick.service;
 
+import com.kingjakeu.promode.api.pick.dao.PickHistoryRepositorySupport;
+import com.kingjakeu.promode.api.pick.dto.ChampPickInfoDto;
+import com.kingjakeu.promode.common.constant.LolRole;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -14,6 +19,9 @@ class PickHistoryInfoServiceTest {
 
     @Autowired
     PickHistoryInfoService pickHistoryInfoService;
+
+    @Autowired
+    PickHistoryRepositorySupport pickHistoryRepositorySupport;
 
     @Test
     void findMostPickByTeamInTournament() {
@@ -25,7 +33,6 @@ class PickHistoryInfoServiceTest {
 
     @Test
     void test(){
-        BigDecimal s = new BigDecimal("-12.32");
-        System.out.println(s.abs().toPlainString());
+        this.pickHistoryInfoService.getBestPickOfTheWeek(LocalDate.parse("2021-03-19"));
     }
 }
