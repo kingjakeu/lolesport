@@ -1,15 +1,19 @@
 package com.kingjakeu.promode.api.match.service;
 
+import com.kingjakeu.promode.api.game.dao.PlayerGameSummaryRepositorySupport;
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.game.domain.TeamGameSummary;
+import com.kingjakeu.promode.api.game.dto.GameSimpleResultDto;
 import com.kingjakeu.promode.api.game.service.GameCommonService;
 import com.kingjakeu.promode.api.game.service.TeamGameCommonService;
 import com.kingjakeu.promode.api.match.domain.Match;
+import com.kingjakeu.promode.api.match.dto.response.MatchGameResultResDto;
 import com.kingjakeu.promode.api.match.dto.response.MatchResultResDto;
 import com.kingjakeu.promode.api.match.dto.response.MatchTeamResDto;
 import com.kingjakeu.promode.api.standing.domain.Standing;
 import com.kingjakeu.promode.api.standing.service.StandingCommonService;
 import com.kingjakeu.promode.api.team.domain.Team;
+import com.kingjakeu.promode.api.team.dto.TeamSimpleDto;
 import com.kingjakeu.promode.common.constant.CommonCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,6 +53,25 @@ public class MatchService {
             matchResultResDtoList.add(matchResultResDto);
         }
         return matchResultResDtoList;
+    }
+
+    public List<MatchGameResultResDto> getMatchGames(String matchId){
+        Match match = this.matchCommonService.findByMatchId(matchId);
+        List<Game> gameList = this.gameCommonService.findCompletedGameByMatch(match);
+        List<MatchGameResultResDto> gameResultResDto = new ArrayList<>();
+
+        for(Game game : gameList) {
+            GameSimpleResultDto gameSimpleResultDto = this.gameCommonService.findGameSimpleResultByGame(game);
+            gameResultResDto.add(MatchGameResultResDto.builder()
+                    .gameId(gameSimpleResultDto.getGameId())
+                    .blueTeam(new TeamSimpleDto(game.getBlueTeam()))
+                    .redTeam(new TeamSimpleDto(game.getRedTeam()))
+                    .winTeam(gameSimpleResultDto.getWinTeam())
+                    .blueKillScore(gameSimpleResultDto.getBlueKillScore())
+                    .redKillScore(gameSimpleResultDto.getRedKillScore())
+                    .build());
+        }
+        return gameResultResDto;
     }
 
     public MatchTeamResDto getMatchTeamResDto(Team team){

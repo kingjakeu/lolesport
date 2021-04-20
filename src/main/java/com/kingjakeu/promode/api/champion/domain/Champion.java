@@ -1,13 +1,11 @@
 package com.kingjakeu.promode.api.champion.domain;
 
+import com.kingjakeu.promode.api.champion.dto.ChampionSimpleDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,6 +29,10 @@ public class Champion {
     @Column(name = "PATCH_VER", length = 20)
     private String patchVersion;
 
+    @Lob
+    @Column(name = "IMAGE_URL")
+    private String imageUrl;
+
     @CreationTimestamp
     @Column(name = "CREATE_DTM", nullable = false, updatable = false, columnDefinition = "timestamp")
     private LocalDateTime createDateTime;
@@ -38,4 +40,12 @@ public class Champion {
     @UpdateTimestamp
     @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updateDateTime;
+
+    public ChampionSimpleDto toChampionSimpleDto(){
+        return ChampionSimpleDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .imageUrl(this.imageUrl)
+                .build();
+    }
 }

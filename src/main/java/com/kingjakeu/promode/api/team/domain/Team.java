@@ -1,6 +1,7 @@
 package com.kingjakeu.promode.api.team.domain;
 
 import com.kingjakeu.promode.api.league.domain.League;
+import com.kingjakeu.promode.api.team.dto.TeamSimpleDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
