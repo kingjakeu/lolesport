@@ -1,5 +1,6 @@
 package com.kingjakeu.promode.api.pick.dao;
 
+import com.kingjakeu.promode.api.champion.domain.Champion;
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.pick.domain.PickHistory;
 import com.kingjakeu.promode.api.pick.domain.PickHistoryId;
@@ -34,6 +35,5 @@ public interface PickHistoryRepository extends JpaRepository<PickHistory, PickHi
                                                                             @Param("redFlag") String redFlag,
                                                                             @Param("laneRole") LolRole laneRole,
                                                                             Pageable pageable);
-    List<PickHistory> findPickHistoriesByChampionIdAndGameIn(String champId, List<Game> gameList);
 }
 

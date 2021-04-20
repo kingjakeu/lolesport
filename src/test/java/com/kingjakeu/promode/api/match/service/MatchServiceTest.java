@@ -1,5 +1,6 @@
 package com.kingjakeu.promode.api.match.service;
 
+import com.kingjakeu.promode.api.match.dto.response.MatchGameResultResDto;
 import com.kingjakeu.promode.api.match.dto.response.MatchResultResDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,5 +27,11 @@ class MatchServiceTest {
         for(MatchResultResDto resultResDto : matchResultResDtoList){
             System.out.println(resultResDto.toString());
         }
+    }
+
+    @Test
+    void getMatchGames() {
+        List<MatchGameResultResDto> gameResultResDtos = this.matchService.getMatchGames("105522984812850465");
+        System.out.println(gameResultResDtos.toString());
     }
 }

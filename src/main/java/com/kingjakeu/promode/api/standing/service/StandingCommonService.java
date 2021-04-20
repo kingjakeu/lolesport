@@ -42,7 +42,7 @@ public class StandingCommonService {
 
         List<Match> matchList = this.matchCommonService.findAllByTournament(tournament);
         for(Match match : matchList){
-            List<Game> gameList = this.gameCommonService.findCompletedGameByMatch(match);
+            List<Game> gameList = this.gameCommonService.findCompletedGameByMatchId(match.getId());
             if (this.teamGameCommonService.isGameListExisted(gameList)){
                 int matchGameCount = gameList.size();
                 int team1Win = this.teamGameCommonService.countTeamWinInGameList(match.getTeam1(), gameList);

@@ -1,0 +1,2 @@
+### match 경기 정보
+GET http://localhost:8080/match/105522984812850465/games

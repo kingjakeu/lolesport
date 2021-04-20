@@ -40,12 +40,4 @@ public class Champion {
     @UpdateTimestamp
     @Column(name = "UPDATE_DTM", nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updateDateTime;
-
-    public ChampionSimpleDto toChampionSimpleDto(){
-        return ChampionSimpleDto.builder()
-                .id(this.id)
-                .name(this.name)
-                .imageUrl(this.imageUrl)
-                .build();
-    }
 }

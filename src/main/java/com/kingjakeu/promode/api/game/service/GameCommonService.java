@@ -34,8 +34,8 @@ public class GameCommonService {
        return this.gameRepository.findAllByMatchId(matchId);
     }
 
-    public List<Game> findCompletedGameByMatch(Match match){
-        return this.gameRepository.findAllByMatchAndState(match, CommonCode.STATE_COMPLETED.getCode());
+    public List<Game> findCompletedGameByMatchId(String matchId){
+        return this.gameRepository.findAllByMatchIdAndState(matchId, CommonCode.STATE_COMPLETED.getCode());
     }
 
     public String findWinSideByGame(Game game){

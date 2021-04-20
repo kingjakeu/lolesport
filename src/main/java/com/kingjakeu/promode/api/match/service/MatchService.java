@@ -1,6 +1,5 @@
 package com.kingjakeu.promode.api.match.service;
 
-import com.kingjakeu.promode.api.game.dao.PlayerGameSummaryRepositorySupport;
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.game.domain.TeamGameSummary;
 import com.kingjakeu.promode.api.game.dto.GameSimpleResultDto;
@@ -10,6 +9,7 @@ import com.kingjakeu.promode.api.match.domain.Match;
 import com.kingjakeu.promode.api.match.dto.response.MatchGameResultResDto;
 import com.kingjakeu.promode.api.match.dto.response.MatchResultResDto;
 import com.kingjakeu.promode.api.match.dto.response.MatchTeamResDto;
+import com.kingjakeu.promode.api.pick.service.PickHistoryCommonService;
 import com.kingjakeu.promode.api.standing.domain.Standing;
 import com.kingjakeu.promode.api.standing.service.StandingCommonService;
 import com.kingjakeu.promode.api.team.domain.Team;
@@ -29,6 +29,7 @@ public class MatchService {
     private final GameCommonService gameCommonService;
     private final TeamGameCommonService teamGameCommonService;
     private final StandingCommonService standingCommonService;
+    private final PickHistoryCommonService pickHistoryCommonService;
 
     public List<MatchResultResDto> getMatch(LocalDate matchDate){
         List<Match> matchList = this.matchCommonService.findAllByMatchDate(matchDate);
@@ -44,7 +45,7 @@ public class MatchService {
                     .build();
 
             if(match.isCompleted()){
-                List<Game> gameList = this.gameCommonService.findCompletedGameByMatch(match);
+                List<Game> gameList = this.gameCommonService.findCompletedGameByMatchId(match.getId());
                 for(Game game : gameList){
                     List<TeamGameSummary> teamGameList = this.teamGameCommonService.findTeamGameSummaryByGame(game);
                     matchResultResDto.calculateGameScore(teamGameList);
@@ -56,12 +57,12 @@ public class MatchService {
     }
 
     public List<MatchGameResultResDto> getMatchGames(String matchId){
-        Match match = this.matchCommonService.findByMatchId(matchId);
-        List<Game> gameList = this.gameCommonService.findCompletedGameByMatch(match);
+        List<Game> gameList = this.gameCommonService.findCompletedGameByMatchId(matchId);
         List<MatchGameResultResDto> gameResultResDto = new ArrayList<>();
 
         for(Game game : gameList) {
             GameSimpleResultDto gameSimpleResultDto = this.gameCommonService.findGameSimpleResultByGame(game);
+
             gameResultResDto.add(MatchGameResultResDto.builder()
                     .gameId(gameSimpleResultDto.getGameId())
                     .blueTeam(new TeamSimpleDto(game.getBlueTeam()))
@@ -69,6 +70,10 @@ public class MatchService {
                     .winTeam(gameSimpleResultDto.getWinTeam())
                     .blueKillScore(gameSimpleResultDto.getBlueKillScore())
                     .redKillScore(gameSimpleResultDto.getRedKillScore())
+                    .bluePickList(this.pickHistoryCommonService
+                            .findGamePickedChampionsByGameIdAndSide(game.getId(), CommonCode.BLUE_SIDE.getCode()))
+                    .redPickList(this.pickHistoryCommonService
+                            .findGamePickedChampionsByGameIdAndSide(game.getId(), CommonCode.RED_SIDE.getCode()))
                     .build());
         }
         return gameResultResDto;

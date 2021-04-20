@@ -2,13 +2,10 @@ package com.kingjakeu.promode.api.pick.service;
 
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.game.service.GameCommonService;
-import com.kingjakeu.promode.api.game.service.TeamGameCommonService;
 import com.kingjakeu.promode.api.match.domain.Match;
 import com.kingjakeu.promode.api.match.service.MatchCommonService;
 import com.kingjakeu.promode.api.pick.dao.PickHistoryRepository;
 import com.kingjakeu.promode.api.pick.dao.PickHistoryRepositorySupport;
-import com.kingjakeu.promode.api.pick.domain.PickHistory;
-import com.kingjakeu.promode.api.pick.dto.BestChampLanePickDto;
 import com.kingjakeu.promode.api.pick.dto.ChampPickInfoDto;
 import com.kingjakeu.promode.common.constant.CommonCode;
 import com.kingjakeu.promode.common.constant.LolRole;
@@ -56,7 +53,7 @@ public class PickHistoryInfoService {
         List<Match> matchList = this.matchCommonService.findAllByMatchDate(matchDate);
         List<Game> gameList = new LinkedList<>();
         for(Match match : matchList){
-            gameList.addAll(this.gameCommonService.findCompletedGameByMatch(match));
+            gameList.addAll(this.gameCommonService.findCompletedGameByMatchId(match.getId()));
         }
 
         Map<String, ChampPickInfoDto> bestChampPick = new LinkedHashMap<>();

@@ -1,5 +1,6 @@
 package com.kingjakeu.promode.api.pick.dao;
 
+import com.kingjakeu.promode.api.champion.domain.Champion;
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.pick.domain.PickHistory;
 import com.kingjakeu.promode.api.pick.dto.ChampPickInfoDto;
@@ -47,5 +48,13 @@ public class PickHistoryRepositorySupport extends QuerydslRepositorySupport {
                 .on(pickHistory.game.eq(teamGameSummary.game), pickHistory.pickHistoryId.side.eq(teamGameSummary.side), teamGameSummary.win.eq(winFlag))
                 .where(pickHistory.champion.id.eq(champId), pickHistory.game.in(gameList))
                 .fetchOne();
+    }
+
+    public List<PickHistory> findPickHistoriesByGameIdAndSide(String gameId, String side){
+        return this.jpaQueryFactory
+                .select(pickHistory)
+                .from(pickHistory)
+                .where(pickHistory.pickHistoryId.gameId.eq(gameId), pickHistory.pickHistoryId.side.eq(side))
+                .fetch();
     }
 }

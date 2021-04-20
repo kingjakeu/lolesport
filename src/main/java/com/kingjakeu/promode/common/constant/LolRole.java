@@ -61,4 +61,5 @@ public enum LolRole {
     public static List<LolRole> playerValues(){
         return Arrays.asList(LolRole.TOP, LolRole.JUG, LolRole.MID, LolRole.BOT, LolRole.SUP);
     }
+
 }
