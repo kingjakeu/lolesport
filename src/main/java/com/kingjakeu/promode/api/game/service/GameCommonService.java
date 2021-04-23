@@ -5,6 +5,7 @@ import com.kingjakeu.promode.api.game.dao.PlayerGameSummaryRepositorySupport;
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.game.domain.TeamGameSummary;
 import com.kingjakeu.promode.api.game.dto.GameSimpleResultDto;
+import com.kingjakeu.promode.api.game.dto.PlayerAverageSummaryDto;
 import com.kingjakeu.promode.api.match.domain.Match;
 import com.kingjakeu.promode.common.constant.CommonCode;
 import com.kingjakeu.promode.common.constant.CommonError;
@@ -55,5 +56,10 @@ public class GameCommonService {
                 .redKillScore(this.playerGameSummaryRepositorySupport
                         .countTeamDeathByGame(game.getId(), CommonCode.BLUE_SIDE.getCode()))
                 .build();
+    }
+
+    public List<PlayerAverageSummaryDto> findPlayerAverageSummaryList(){
+        List<PlayerAverageSummaryDto> playerAverageSummaryDtoList = this.playerGameSummaryRepositorySupport.findPlayerAverageSummary();
+        return playerAverageSummaryDtoList;
     }
 }
