@@ -57,9 +57,4 @@ public class GameCommonService {
                         .countTeamDeathByGame(game.getId(), CommonCode.BLUE_SIDE.getCode()))
                 .build();
     }
-
-    public List<PlayerAverageSummaryDto> findPlayerAverageSummaryList(){
-        List<PlayerAverageSummaryDto> playerAverageSummaryDtoList = this.playerGameSummaryRepositorySupport.findPlayerAverageSummary();
-        return playerAverageSummaryDtoList;
-    }
 }

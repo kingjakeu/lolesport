@@ -19,7 +19,5 @@ class GameCommonServiceTest {
     private GameCommonService gameCommonService;
     @Test
     void findPlayerAverageSummaryList() {
-        List<PlayerAverageSummaryDto> list = this.gameCommonService.findPlayerAverageSummaryList();;
-        System.out.println(list);
     }
 }

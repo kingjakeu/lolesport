@@ -2,6 +2,7 @@ package com.kingjakeu.promode.api.game.dao;
 
 import com.kingjakeu.promode.api.game.domain.PlayerGameSummary;
 import com.kingjakeu.promode.api.game.dto.PlayerAverageSummaryDto;
+import com.kingjakeu.promode.common.constant.LolRole;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -32,7 +33,7 @@ public class PlayerGameSummaryRepositorySupport extends QuerydslRepositorySuppor
                 .fetchOne();
     }
 
-    public List<PlayerAverageSummaryDto> findPlayerAverageSummary(){
+    public List<PlayerAverageSummaryDto> findPlayerAverageSummary(LolRole role){
         return this.jpaQueryFactory
                 .select(Projections.constructor(PlayerAverageSummaryDto.class,
                         playerGameSummary.playerGameSummaryId.playerId,
@@ -49,6 +50,9 @@ public class PlayerGameSummaryRepositorySupport extends QuerydslRepositorySuppor
                 .on(playerGameSummary.playerGameSummaryId.gameId.eq(teamGameSummary.teamGameSummaryId.gameId),
                         playerGameSummary.side.eq(teamGameSummary.side))
                 .groupBy(playerGameSummary.playerGameSummaryId.playerId)
+                .where(playerGameSummary.role.eq(role))
+                .orderBy(playerGameSummary.player.summonerName.asc())
+                .limit(10)
                 .fetch();
     }
 }
