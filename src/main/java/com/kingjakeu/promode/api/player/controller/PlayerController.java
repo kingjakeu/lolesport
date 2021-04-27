@@ -18,7 +18,8 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @GetMapping("/summary")
-    public List<PlayerAverageSummaryDto> getPlayerSummaryList(@RequestParam String role){
-        return this.playerService.getPlayerSummaryList(role);
+    public List<PlayerAverageSummaryDto> getPlayerSummaryList(@RequestParam(required = false) String role,
+                                                              @RequestParam(required = false)  Integer pageIdx){
+        return this.playerService.getPlayerSummaryList(role, pageIdx);
     }
 }
