@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class TeamSimpleDto {
-    private String id;
-    private String code;
-    private String name;
-    private String imgUrl;
+    protected String id;
+    protected String code;
+    protected String name;
+    protected String imgUrl;
 
     public TeamSimpleDto(Team team){
         this.id = team.getId();
