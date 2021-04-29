@@ -1,5 +1,6 @@
 package com.kingjakeu.promode.api.crawl.service;
 
+import com.kingjakeu.promode.api.crawl.dto.request.MatchHistoryRequestDto;
 import com.kingjakeu.promode.api.game.dao.GameRepository;
 import com.kingjakeu.promode.api.game.domain.Game;
 import com.kingjakeu.promode.api.match.dao.MatchRepository;
@@ -32,12 +33,13 @@ class   MatchHistoryCrawlServiceTest {
     }
 
     @Test
-    void testCrawlGameMatchHistory() {
-        List<Match> matchList = this.matchRepository.findAllByBlockName("9주 차");
-        List<Game> gameList = new ArrayList<>();
-        for(Match match : matchList) {
-            gameList.addAll(this.gameRepository.findAllByMatchId(match.getId()));
+    void crawlGameResultDetail() {
+        List<Match> matchList = this.matchRepository.findAllByBlockName("WEEK9");
+
+        for(Match match : matchList){
+            MatchHistoryRequestDto matchHistoryRequestDto = new MatchHistoryRequestDto();
+            matchHistoryRequestDto.setMatchId(match.getId());
+            this.matchHistoryCrawlService.crawlGameResultDetail(matchHistoryRequestDto);
         }
-        this.matchHistoryCrawlService.crawlGameMatchHistory(gameList);
     }
 }

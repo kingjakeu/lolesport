@@ -1,6 +1,6 @@
 package com.kingjakeu.promode.api.team.service;
 
-import com.kingjakeu.promode.api.game.dao.TeamGameSummaryRepositorySupport;
+import com.kingjakeu.promode.api.team.dao.TeamRepositorySupport;
 import com.kingjakeu.promode.api.team.dto.TeamTournamentResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final TeamGameSummaryRepositorySupport teamGameSummaryRepositorySupport;
+    private final TeamRepositorySupport teamRepositorySupport;
 
     public List<TeamTournamentResultDto> getTeamInfoTournamentResult(String tournamentId, Integer pageIdx){
         return this.findTeamInfoTournamentResult(
@@ -25,7 +25,7 @@ public class TeamService {
 
     private List<TeamTournamentResultDto> findTeamInfoTournamentResult(String tournamentId, Integer pageIdx){
         Pageable pageable = PageRequest.of(pageIdx, 10);
-        Page<TeamTournamentResultDto> dtoPage = this.teamGameSummaryRepositorySupport
+        Page<TeamTournamentResultDto> dtoPage = this.teamRepositorySupport
                 .findTeamTournamentResultDto(tournamentId, pageable);
         return dtoPage.getContent();
     }

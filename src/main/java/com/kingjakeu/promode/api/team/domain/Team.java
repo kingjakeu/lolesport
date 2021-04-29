@@ -29,7 +29,7 @@ public class Team {
     @Column(name = "SLUG", nullable = false, length = 100)
     private String slug;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEAGUE_ID")
     private League league;
 

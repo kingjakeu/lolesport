@@ -70,6 +70,6 @@ public class CrawlController {
 
     @PostMapping(value = "/match-history")
     public void crawlGameMatchHistoryInfo(@RequestBody MatchHistoryRequestDto requestDto){
-        this.matchHistoryCrawlService.crawlGameMatchHistory(requestDto);
+        this.matchHistoryCrawlService.crawlGameResultDetail(requestDto);
     }
 }

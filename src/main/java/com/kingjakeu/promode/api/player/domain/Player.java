@@ -40,7 +40,7 @@ public class Player {
     @Column(name = "LANE_ROLE", length = 5)
     private LolRole role;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 

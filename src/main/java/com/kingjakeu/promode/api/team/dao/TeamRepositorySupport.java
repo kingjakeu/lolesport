@@ -1,6 +1,6 @@
-package com.kingjakeu.promode.api.game.dao;
+package com.kingjakeu.promode.api.team.dao;
 
-import com.kingjakeu.promode.api.game.domain.TeamGameSummary;
+import com.kingjakeu.promode.api.team.domain.Team;
 import com.kingjakeu.promode.api.team.dto.TeamTournamentResultDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
@@ -16,34 +16,36 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
 
-import static com.kingjakeu.promode.api.game.domain.QTeamGameSummary.teamGameSummary;
+import static com.kingjakeu.promode.api.standing.domain.QStanding.standing;
 import static com.kingjakeu.promode.api.team.domain.QTeam.team;
 
 @Repository
-public class TeamGameSummaryRepositorySupport extends QuerydslRepositorySupport {
+public class TeamRepositorySupport extends QuerydslRepositorySupport {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public TeamGameSummaryRepositorySupport(JPAQueryFactory jpaQueryFactory){
-        super(TeamGameSummary.class);
+    public TeamRepositorySupport(JPAQueryFactory jpaQueryFactory){
+        super(Team.class);
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
     /**
-     * 팀 리스트 조회
+     * 팀 목록 + 토너 먼트 결과 조회
      * @param tournamentId 토너먼트 아이디
-     * @param pageable 페이징
-     * @return 팀 리스트
+     * @param pageable 페이지
+     * @return 팀목록
      */
     public Page<TeamTournamentResultDto> findTeamTournamentResultDto(String tournamentId, Pageable pageable){
         JPAQuery<TeamTournamentResultDto> query = this.jpaQueryFactory
-                .select(Projections.constructor(TeamTournamentResultDto.class,
+                .select(Projections.constructor(
+                        TeamTournamentResultDto.class,
                         team,
-                        teamGameSummary.win.when(true).then(1L).otherwise(Long.valueOf(0)).sum(),
-                        teamGameSummary.teamGameSummaryId.gameId.count()
-                ))
-                .from(teamGameSummary)
-                .innerJoin(teamGameSummary.team, team)
-                .where(teamGameSummary.game.tournament.id.eq(tournamentId));
+                        standing
+                        )
+                ).from(team)
+                .join(standing)
+                .on(team.id.eq(standing.team.id))
+                .where(standing.tournament.id.eq(tournamentId))
+                .orderBy(standing.rank.asc());
 
         JPQLQuery<TeamTournamentResultDto> pagination = querydsl().applyPagination(pageable, query);
         long totalCount = pagination.fetchCount();

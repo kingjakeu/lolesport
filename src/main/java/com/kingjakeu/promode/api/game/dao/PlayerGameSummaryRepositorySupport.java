@@ -1,7 +1,8 @@
 package com.kingjakeu.promode.api.game.dao;
 
 import com.kingjakeu.promode.api.game.domain.PlayerGameSummary;
-import com.kingjakeu.promode.api.game.dto.PlayerAverageSummaryDto;
+import com.kingjakeu.promode.api.game.dto.PlayerStatDto;
+import com.kingjakeu.promode.api.player.domain.Player;
 import com.kingjakeu.promode.common.constant.LolRole;
 
 import com.querydsl.core.types.Projections;
@@ -22,6 +23,7 @@ import java.util.Objects;
 
 import static com.kingjakeu.promode.api.game.domain.QPlayerGameSummary.playerGameSummary;
 import static com.kingjakeu.promode.api.player.domain.QPlayer.player;
+import static com.kingjakeu.promode.api.game.domain.QGame.game;
 import static com.kingjakeu.promode.api.game.domain.QTeamGameSummary.teamGameSummary;
 
 @Repository
@@ -41,9 +43,9 @@ public class PlayerGameSummaryRepositorySupport extends QuerydslRepositorySuppor
                 .fetchOne();
     }
 
-    public Page<PlayerAverageSummaryDto> findPlayerAverageSummary(LolRole role, Pageable pageable){
-        JPAQuery<PlayerAverageSummaryDto> query = this.jpaQueryFactory
-                .select(Projections.constructor(PlayerAverageSummaryDto.class,
+    public Page<PlayerStatDto> findPlayerAverageSummary(LolRole role, Pageable pageable){
+        JPAQuery<PlayerStatDto> query = this.jpaQueryFactory
+                .select(Projections.constructor(PlayerStatDto.class,
                         playerGameSummary.playerGameSummaryId.playerId,
                         playerGameSummary.player.summonerName,
                         playerGameSummary.role,
@@ -61,11 +63,32 @@ public class PlayerGameSummaryRepositorySupport extends QuerydslRepositorySuppor
                 .where(this.eqRole(role))
                 .orderBy(playerGameSummary.player.summonerName.asc());
 
-        JPQLQuery<PlayerAverageSummaryDto> pagination = querydsl().applyPagination(pageable, query);
+        JPQLQuery<PlayerStatDto> pagination = querydsl().applyPagination(pageable, query);
 
         long totalCount = pagination.fetchCount();
         Pageable pageRequest = this.revisePageRequest(pageable, totalCount);
         return new PageImpl<>(querydsl().applyPagination(pageRequest, query).fetch(), pageRequest, totalCount);
+    }
+
+    public List<PlayerStatDto> findPlayerStatDtoList(String tournamentId, String matchBlock, LolRole lolRole){
+        JPAQuery<PlayerStatDto> query = this.jpaQueryFactory
+                .select(Projections.constructor(PlayerStatDto.class,
+                        player.id,
+                        player.summonerName,
+                        player.role,
+                        playerGameSummary.kill.sum(),
+                        playerGameSummary.death.sum(),
+                        playerGameSummary.assist.sum(),
+                        player.team.id
+                                .when(game.winTeam.id).then(1L).otherwise(Long.valueOf(0)).sum(),
+                        playerGameSummary.playerGameSummaryId.gameId.count()
+                        )
+                ).from(playerGameSummary)
+                .innerJoin(playerGameSummary.player, player)
+                .innerJoin(playerGameSummary.game, game)
+                .where(game.tournament.id.eq(tournamentId), game.match.blockName.eq(matchBlock), player.role.eq(lolRole))
+                .groupBy(player.id);
+        return query.fetch();
     }
 
     private BooleanExpression eqRole(LolRole role){

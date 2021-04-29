@@ -38,6 +38,10 @@ public class TeamDto {
         return this.teamId.equals(200L);
     }
 
+    public boolean isWinTeam(){
+        return CommonCode.WIN.codeEqualsTo(this.win);
+    }
+
     public List<String> getBanChampionKeyList(){
         List<String> banChampionKeyList = new ArrayList<>();
 

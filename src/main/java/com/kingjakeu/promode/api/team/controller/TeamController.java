@@ -17,7 +17,7 @@ public class TeamController {
 
     private final TeamService teamService;
 
-    @GetMapping("/")
+    @GetMapping
     public List<TeamTournamentResultDto> getTeamList(@RequestParam String tournamentId,
                                                      @RequestParam(required = false) Integer page){
         return this.teamService.getTeamInfoTournamentResult(tournamentId, page);

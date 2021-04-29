@@ -28,7 +28,7 @@ public class ScheduleEventDto {
     public Match toMatchEntity(){
         return Match.builder()
                 .id(this.match.getId())
-                .blockName(this.blockName)
+                .blockName(this.refineBlockName())
                 .team1(this.getMatch().getTeams().get(0).toTeamEntity())
                 .team2(this.getMatch().getTeams().get(1).toTeamEntity())
                 .startTime(ZonedDateTime.parse(this.startTime).toLocalDateTime())
@@ -36,4 +36,11 @@ public class ScheduleEventDto {
                 .build();
     }
 
+    private String refineBlockName(){
+        String word = "주 차";
+        if(this.blockName.contains(word)){
+            return "WEEK" + this.blockName.replace("주 차", "");
+        }
+        return this.blockName;
+    }
 }

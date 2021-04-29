@@ -1,5 +1,6 @@
 package com.kingjakeu.promode.api.crawl.dto.matchhistory;
 
+import com.kingjakeu.promode.common.constant.CommonCode;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -40,6 +41,15 @@ public class MatchHistoryDto {
         return null;
     }
 
+    public String getWinTeamSide(){
+        if(this.getBlueTeamDto().isWinTeam()) {
+            return CommonCode.BLUE_SIDE.getCode();
+        }else if(this.getRedTeamDto().isWinTeam()){
+            return CommonCode.RED_SIDE.getCode();
+        }
+        return null;
+    }
+
     public String findSummonerNameById(Long id){
         if(this.participantIdMap == null){
             this.participantIdMap = new HashMap<>();
@@ -48,5 +58,11 @@ public class MatchHistoryDto {
             }
         }
         return this.participantIdMap.get(id);
+    }
+
+    public String getGameVersion(){
+        String[] str = this.gameVersion.split("\\.");
+        if(str.length < 3) return this.gameVersion;
+        return str[0] + "." + str[1];
     }
 }

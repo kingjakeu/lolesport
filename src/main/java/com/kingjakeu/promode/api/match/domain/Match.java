@@ -27,19 +27,24 @@ public class Match {
     private String blockName;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TOURNAMENT_ID")
     private Tournament tournament;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_1_ID")
     private Team team1;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_2_ID")
     private Team team2;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "WIN_TEAM_ID")
+    private Team winTeam;
 
     @Column(name = "START_TIME", columnDefinition = "datetime")
     private LocalDateTime startTime;

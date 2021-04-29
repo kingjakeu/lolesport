@@ -4,6 +4,7 @@ import com.kingjakeu.promode.api.match.domain.Match;
 import com.kingjakeu.promode.api.tournament.domain.Tournament;
 import com.kingjakeu.promode.api.league.domain.League;
 import com.kingjakeu.promode.api.team.domain.Team;
+import com.kingjakeu.promode.common.constant.CommonCode;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,15 +23,15 @@ public class Game {
     @Column(name = "ID", length = 20)
     private String id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MATCH_ID")
     private Match match;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TOURNAMENT_ID")
     private Tournament tournament;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEAGUE_ID")
     private League league;
 
@@ -40,13 +41,18 @@ public class Game {
     @Column(name = "STATE", length = 20)
     private String state;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BLUE_TEAM_ID")
     private Team blueTeam;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RED_TEAM_ID")
     private Team redTeam;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "WIN_TEAM_ID")
+    private Team winTeam;
 
     @Setter
     @Column(name = "PATCH_VER", length = 20)
@@ -76,5 +82,15 @@ public class Game {
 
     public boolean isMatchHistoryLinkEmpty(){
         return this.matchHistoryUrl == null;
+    }
+
+    public Team getTeamBySide(String side){
+        if (CommonCode.BLUE_SIDE.codeEqualsTo(side)){
+            return this.blueTeam;
+        }else if(CommonCode.RED_SIDE.codeEqualsTo(side)){
+            return this.redTeam;
+        }else{
+            return null;
+        }
     }
 }

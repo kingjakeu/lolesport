@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 
 @Getter
 @ToString
-public class PlayerAverageSummaryDto {
+public class PlayerStatDto {
 
     private String id;
     private String summonerName;
@@ -23,14 +23,37 @@ public class PlayerAverageSummaryDto {
     private Long totalGame;
     private BigDecimal winRate;
 
-    public PlayerAverageSummaryDto(String id,
-                                   String summonerName,
-                                   LolRole role,
-                                   Double kill,
-                                   Double death,
-                                   Double assist,
-                                   Long win,
-                                   Long totalGame){
+    public PlayerStatDto(String id,
+                         String summonerName,
+                         LolRole role,
+                         Long totalKill,
+                         Long totalDeath,
+                         Long totalAssist,
+                         Long win,
+                         Long totalGame){
+        this.id = id;
+        this.summonerName = summonerName;
+        this.role = role;
+        this.win = win;
+        this.totalGame = totalGame;
+        this.loss = this.totalGame - this.win;
+        this.computeWinRate();;
+
+        BigDecimal totalGameCount = new BigDecimal(this.totalGame);
+        this.kill = BigDecimal.valueOf(totalKill).divide(totalGameCount, 1, RoundingMode.FLOOR);
+        this.death = BigDecimal.valueOf(totalDeath).divide(totalGameCount, 1, RoundingMode.FLOOR);
+        this.assist = BigDecimal.valueOf(totalAssist).divide(totalGameCount, 1, RoundingMode.FLOOR);
+        this.computeKda();
+    }
+
+    public PlayerStatDto(String id,
+                         String summonerName,
+                         LolRole role,
+                         Double kill,
+                         Double death,
+                         Double assist,
+                         Long win,
+                         Long totalGame){
         this.id = id;
         this.summonerName = summonerName;
         this.role = role;
